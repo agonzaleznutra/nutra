@@ -1,5 +1,12 @@
 from django.http import HttpResponse
+import json
 
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
+def recomendacion(request):
+    retorno = {"s1":request.POST["cat1"],"s2":request.POST["cat2"],"s3":request.POST["cat3"],"s4":request.POST["cat4"]}
+    return HttpResponse (
+		json.dumps(retorno),
+		content_type = "application/json"
+	)	
