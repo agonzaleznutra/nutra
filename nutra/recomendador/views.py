@@ -8,7 +8,10 @@ def index(request):
 @csrf_exempt
 def recomendacion(request):
     print("controladooo alvaro",request.POST)
-    retorno = {"s1":request.POST["cat1"],"s2":request.POST["cat2"],"s3":request.POST["cat3"],"s4":request.POST["cat4"]}
+    retorno = {"s1":request.POST.get('cat1', 'No data found'),
+    "s2":request.POST.get('cat2', 'No data found'),
+    "s3":request.POST.get('cat3', 'No data found'),
+    "s4":request.POST.get('cat4', 'No data found')}
     return HttpResponse (
 		json.dumps(retorno),
 		content_type = "application/json"
