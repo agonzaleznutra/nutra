@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  
+
 }
 
 .App-logo {
@@ -36,6 +38,7 @@
   overflow-x:hidden;
   font-size: calc(10px + 2vmin);
   color: white;
+  font-family: fantasy;
 }
 .dot{
     transition: all 2s ease-in-out;

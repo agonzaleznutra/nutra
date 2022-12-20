@@ -9,14 +9,17 @@ function App() {
   var inicial = []
   var ppal = 5;
   var colors = {1:"#f5deb9",2:"#a371cf",3:"#778eb8",4:"#324e76"}
-  
+  var mensaje = ["Eres la respuesta al llamado de un mundo que siempre necesita sanar","Eres un profesional de la salud, un hereo","Respondiendo al llamado de la naturaleza","Encontrarás todo lo que necesitas para tu camino","Aquí y ahora."]
   var dot = {}
   for(var i = 0; i< numdots;i++){
     dot = {"key":i+ppal,"x":Math.floor(Math.random() * 99),"y":Math.floor(Math.random() * 99),"z":Math.floor(Math.random() * depth),"color":colors[Math.round(1+(Math.random()*2))]}
     if(i<ppal){
       
       dot["secuencia"]=""+i;
-      dot["texto"]="textoooo..."+i;
+      if(i < mensaje.length){
+        dot["texto"]=mensaje[i];
+      }
+        
       if(i < 5){
         dot["z"]=(Math.floor(Math.random()*5))+3;
         dot["x"] = (Math.floor(Math.random() * 40))+30
@@ -97,6 +100,14 @@ function App() {
       const salidaz = items.map((item) => {
         var dx = (item.x -diff.x)/100 ;
         var dy = (item.y -diff.y)/100 ;
+        if(item.secuencia == nwcurr){
+          item["prevcolor"] = item.color;
+          item.color = "white";
+        }
+        else if(typeof item.prevcolor != "undefined"){
+          item.color = item.prevcolor;
+
+        }
         return {...item , z:item.z+diff.z, x:item.x+(2*dx), y:item.y+(2*dy)}
       })
       poss = salidaz.filter(x => x.secuencia == nwcurr)[0]
@@ -122,6 +133,14 @@ function App() {
       const salidaz = items.map((item) => {
         var dx = (item.x -diff.x)/100 ;
         var dy = (item.y -diff.y)/100 ;
+        if(item.secuencia == nwcurr){
+          item["prevcolor"] = item.color;
+          item.color = "white";
+        }
+        else if(typeof item.prevcolor != "undefined"){
+          item.color = item.prevcolor;
+
+        }
         return {...item , z:item.z+diff.z, x:item.x+(2*dx), y:item.y+(2*dy)}
       })
       poss = salidaz.filter(x => x.secuencia == nwcurr)[0]
