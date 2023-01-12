@@ -18,4 +18,4 @@ def recomendacion(request):
 		content_type = "application/json"
 	)	
 def health(request):
-    return render(request,'health.html')
+    return HttpResponse("Healthy nutra.")
