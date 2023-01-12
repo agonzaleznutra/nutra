@@ -6,5 +6,5 @@ urlpatterns = [
     path('app/', include('recomendador.urls')),
     path('admin/', admin.site.urls),
     path('get_recom', views.recomendacion, name='get_recom'),
-    url(r'^health', views.health),
+    url(r'app/', views.health),
 ]
