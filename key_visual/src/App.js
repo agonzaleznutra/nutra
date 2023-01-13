@@ -119,6 +119,9 @@ function App() {
       })
       setItems(salidas)
       console.log("salida_next.....",nwcurr,salidas)
+    }else{
+      window.location.href = '/items';
+
     }
     
   }
