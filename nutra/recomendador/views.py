@@ -8,7 +8,7 @@ def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 @csrf_exempt
 def recomendacion(request):
-    print("controladooo alvaro",request.POST)
+    print("controladooo alvaro",request.POST,request.GET)
     retorno = {"s1":request.POST.get('cat1', 'No data found'),
     "s2":request.POST.get('cat2', 'No data found'),
     "s3":request.POST.get('cat3', 'No data found'),
