@@ -120,7 +120,7 @@ function App() {
       setItems(salidas)
       console.log("salida_next.....",nwcurr,salidas)
     }else{
-      window.parent.location.href = '/items';
+      window.parent.location.href = 'https://nutrabiotics.co/items';
 
     }
     
