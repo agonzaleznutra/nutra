@@ -90,7 +90,7 @@ function App() {
   }
   */
   const MoveNext = () => {
-    if(Number(current) < 5){
+    if(Number(current) < 4){
       const nwcurr = ""+(Number(current)+1)
       setCurrent(nwcurr)
       var poss = items.filter(x => x.secuencia == nwcurr)[0]
