@@ -19,7 +19,7 @@ def recomendacion(request):
 	)	
 @csrf_exempt
 def load_content(request):
-    print("controladooo alvaro222",request.POST,request.GET)
+    print("controladooo alvaro222",request,request.GET)
     
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
@@ -27,3 +27,6 @@ def load_content(request):
 	)
 def health(request):
     return HttpResponse("Healthy nutra.")
+
+
+
