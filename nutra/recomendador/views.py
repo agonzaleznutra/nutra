@@ -17,5 +17,13 @@ def recomendacion(request):
 		json.dumps(retorno),
 		content_type = "application/json"
 	)	
+@csrf_exempt
+def load_content(request):
+    print("controladooo alvaro222",request.POST,request.GET)
+    
+    return HttpResponse (
+		json.dumps({"retorno":"ok"}),
+		content_type = "application/json"
+	)
 def health(request):
     return HttpResponse("Healthy nutra.")

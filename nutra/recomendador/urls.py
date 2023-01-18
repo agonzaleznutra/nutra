@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
     
     url(r'^/get_recom', views.recomendacion, name='get_recom'),
+    url(r'^/load_content', views.load_content, name='load_content'),
 
 ]
