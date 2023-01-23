@@ -50,11 +50,11 @@ def load_content(request):
 
     mongo_client = MongoClient(str("mongodb://%s:%s@127.0.0.1") % (username, password))
 
-    id = mongo_client.nutra.contenidos.find_one({"id":salida["id"]})
+    id = mongo_client.nutra.contenidos.find_one({"id_contenido":salida["id_contenido"]})
     if id is None:
         mongo_client.nutra.contenidos.insert_one(salida)
     else:
-        mongo_client.nutra.contenidos.update_one({"id":salida["id"]},{"$set":salida})
+        mongo_client.nutra.contenidos.update_one({"id_contenido":salida["id_contenido"]},{"$set":salida})
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
 		content_type = "application/json"
