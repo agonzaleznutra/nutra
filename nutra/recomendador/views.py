@@ -22,7 +22,7 @@ def load_content(request):
     username = urllib.parse.quote_plus('aleja_user')
     password = urllib.parse.quote_plus('02-10-91aldigovE')
 
-    mongo_client = MongoClient(str("127.0.0.1") % (username, password))
+    mongo_client = MongoClient(str("mongodb://%s:%s@127.0.0.1") % (username, password))
     mongo_client.contenidos.insert_one(request.POST)
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
