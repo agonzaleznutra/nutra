@@ -49,7 +49,12 @@ def load_content(request):
     password = urllib.parse.quote_plus('02-10-91aldigovE')
 
     mongo_client = MongoClient(str("mongodb://%s:%s@127.0.0.1") % (username, password))
-    mongo_client.nutra.contenidos.insert_one(salida)
+
+    id = mongo_client.nutra.contenidos.find_one({"id":salida["id"]})
+    if id is None:
+        mongo_client.nutra.contenidos.insert_one(salida)
+    else:
+        mongo_client.nutra.contenidos.update_one({"id":salida["id"]},{"$set":salida})
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
 		content_type = "application/json"
