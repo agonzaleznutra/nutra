@@ -19,7 +19,7 @@ def recomendacion(request):
 	)	
 @csrf_exempt
 def load_content(request):
-    print("controladooo alvaro222",request.POST.get("somekey","NA"))
+    print("controladooo alvaro222",request.POST)
     
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
