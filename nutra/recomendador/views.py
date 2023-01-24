@@ -43,12 +43,12 @@ def recomendacion(request):
 	)
 @csrf_exempt
 def load_content(request):
-    salida = extraccion_atributos_en_objeto(request.POST)
+    salida = extraccion_atributos_en_objeto(request.POST) 
     
     username = urllib.parse.quote_plus('aleja_user')
     password = urllib.parse.quote_plus('02-10-91aldigovE')
 
-    mongo_client = MongoClient(str("mongodb://%s:%s@127.0.0.1") % (username, password))
+    mongo_client = MongoClient(str("mongodb://%s:%s@44.209.53.70") % (username, password))
 
     id = mongo_client.nutra.contenidos.find_one({"id_contenido":salida["id_contenido"]})
     if id is None:
