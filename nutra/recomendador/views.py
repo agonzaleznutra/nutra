@@ -9,25 +9,26 @@ def extraccion_atributos_en_objeto(obj):
     
     res = {}
     for o in obj:
-        if ".json" in o:
-            print(o)
-            res[o.split(".json")[0].strip()]  = json.loads(obj[o])
-        elif "[]" in o:
-            lista = obj.getlist(o, [])
-            if len(lista) == 1 and lista[0].strip() == '':
-                lista = []
-            nwlista = []
-            for j in lista:
-                try:
-                    nwlista.append(json.loads(j))
-                except:
-                    nwlista.append(j.strip())
-            res[o.split("[]")[0].strip()] = nwlista
-        else:
-            if o == "id" and obj[o]== "null":
-                res[o] = ""
+        if o != "_id":
+            if ".json" in o:
+                print(o)
+                res[o.split(".json")[0].strip()]  = json.loads(obj[o])
+            elif "[]" in o:
+                lista = obj.getlist(o, [])
+                if len(lista) == 1 and lista[0].strip() == '':
+                    lista = []
+                nwlista = []
+                for j in lista:
+                    try:
+                        nwlista.append(json.loads(j))
+                    except:
+                        nwlista.append(j.strip())
+                res[o.split("[]")[0].strip()] = nwlista
             else:
-                res[o.strip()] = obj[o].strip()
+                if o == "id" and obj[o]== "null":
+                    res[o] = ""
+                else:
+                    res[o.strip()] = obj[o].strip()
     
     res["fecha"] = datetime.datetime.now().strftime("%Y-%m-%d")
     return res
