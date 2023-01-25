@@ -36,7 +36,7 @@ def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 @csrf_exempt
 def recomendacion(request):
-    print(request.POST)
+    print("recomendacion---",request.POST)
     
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
