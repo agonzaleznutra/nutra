@@ -60,6 +60,18 @@ def load_content(request):
 		json.dumps({"retorno":"ok"}),
 		content_type = "application/json"
 	)
+@csrf_exempt
+def set_consumo(request):
+    salida = extraccion_atributos_en_objeto(request.POST) 
+    username = urllib.parse.quote_plus('aleja_user')
+    password = urllib.parse.quote_plus('02-10-91aldigovE')
+    mongo_client = MongoClient(str("mongodb://%s:%s@172.31.22.3") % (username, password))
+    mongo_client.nutra.consumos.insert_one(salida)
+    
+    return HttpResponse (
+		json.dumps({"retorno":"ok"}),
+		content_type = "application/json"
+	)
 def health(request):
     return HttpResponse("Healthy nutra.")
 

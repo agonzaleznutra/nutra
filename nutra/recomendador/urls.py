@@ -6,5 +6,6 @@ urlpatterns = [
     
     url(r'^/get_recom', views.recomendacion, name='get_recom'),
     url(r'^/load_content', views.load_content, name='load_content'),
+    url(r'^/set_consumo', views.set_consumo, name='set_consumo'),
 
 ]
