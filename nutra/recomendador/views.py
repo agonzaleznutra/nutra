@@ -34,12 +34,26 @@ def extraccion_atributos_en_objeto(obj):
     return res
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
+def filtrado(obj):
+    username = urllib.parse.quote_plus('aleja_user')
+    password = urllib.parse.quote_plus('02-10-91aldigovE')
+
+    mongo_client = MongoClient(str("mongodb://%s:%s@172.31.22.3") % (username, password))
+    salida = mongo_client.nutra.contenidos.find()
+    retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
+    for o in salida:
+        retornos["tendencia"].append(o["id_contenido"])
+        retornos["recomendacion"].append(o["id_contenido"])
+        retornos["volveraver"].append(o["id_contenido"])
+    return retornos
 @csrf_exempt
 def recomendacion(request):
     print("recomendacion---",request.POST)
-    
+    obj = extraccion_atributos_en_objeto(request.POST) 
+    salida = filtrado(obj)
+
     return HttpResponse (
-		json.dumps({"retorno":"ok"}),
+		json.dumps({"retorno":"ok","data":salida}),
 		content_type = "application/json"
 	)
 @csrf_exempt
