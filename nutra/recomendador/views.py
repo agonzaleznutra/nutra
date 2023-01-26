@@ -35,6 +35,7 @@ def extraccion_atributos_en_objeto(obj):
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 def filtrado(obj):
+    #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
     username = urllib.parse.quote_plus('aleja_user')
     password = urllib.parse.quote_plus('02-10-91aldigovE')
 
