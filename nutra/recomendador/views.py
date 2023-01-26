@@ -42,9 +42,9 @@ def filtrado(obj):
     salida = mongo_client.nutra.contenidos.find()
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
     for o in salida:
-        retornos["tendencia"].append(o["id_contenido"])
-        retornos["recomendacion"].append(o["id_contenido"])
-        retornos["volveraver"].append(o["id_contenido"])
+        retornos["tendencia"].append(int(o["id_contenido"]))
+        retornos["recomendacion"].append(int(o["id_contenido"]))
+        retornos["volveraver"].append(int(o["id_contenido"]))
     return retornos
 @csrf_exempt
 def recomendacion(request):
