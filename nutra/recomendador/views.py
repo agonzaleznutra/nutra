@@ -48,10 +48,10 @@ def filtrado(obj):
     return retornos
 @csrf_exempt
 def recomendacion(request):
-    print("recomendacion---",request.POST)
+    
     obj = extraccion_atributos_en_objeto(request.POST) 
     salida = filtrado(obj)
-
+    print("recomendacion---",request.POST,salida)
     return HttpResponse (
 		json.dumps({"retorno":"ok","data":salida}),
 		content_type = "application/json"
