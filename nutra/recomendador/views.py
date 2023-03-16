@@ -5,6 +5,10 @@ from django.shortcuts import render
 from pymongo import MongoClient
 import urllib.parse
 import datetime
+username = urllib.parse.quote_plus('aleja_user')
+password = urllib.parse.quote_plus('02-10-91aldigovE')
+
+mongo_client = MongoClient(str("mongodb://%s:%s@172.31.22.3") % (username, password))
 def extraccion_atributos_en_objeto(obj):
     
     res = {}
@@ -36,10 +40,7 @@ def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 def filtrado(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
-    username = urllib.parse.quote_plus('aleja_user')
-    password = urllib.parse.quote_plus('02-10-91aldigovE')
-
-    mongo_client = MongoClient(str("mongodb://%s:%s@172.31.22.3") % (username, password))
+    
     salida = mongo_client.nutra.contenidos.find()
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
     for o in salida:
@@ -52,6 +53,23 @@ def filtrado(obj):
     retornos["volveraver"] = [10,11,12,13]
     """
     return retornos
+@csrf_exempt
+def filter(request):
+    
+    obj = extraccion_atributos_en_objeto(request.POST) 
+    tmp = mongo_client.nutra.contenidos.filter()
+    retornos= {"filtrado":[]}
+    for o in tmp:
+        consolidado = o["TITULO"]+" "+o["RESUMEN"]+" "+o["PRODUCTOS1"]+" "+o["PRODUCTOS2"]+" "+o["PRODUCTOS3"]+" "+o["PRODUCTOS4"]+" "+o["KEYWORD1"]+" "+o["KEYWORD2"]+" "+o["KEYWORD3"]+" "+o["KEYWORD4"]+" "+o["BUSQUEDA1"]+" "+o["BUSQUEDA2"]+" "+o["BUSQUEDA3"]
+        if obj["query"].lower() in consolidado.lower():
+            retornos["filtrado"].append(int(o["id_contenido"]))
+    
+    
+    return HttpResponse (
+		json.dumps({"retorno":"ok","data":retornos}),
+		content_type = "application/json"
+	)
+
 @csrf_exempt
 def recomendacion(request):
     
@@ -66,10 +84,7 @@ def recomendacion(request):
 def load_content(request):
     salida = extraccion_atributos_en_objeto(request.POST) 
     
-    username = urllib.parse.quote_plus('aleja_user')
-    password = urllib.parse.quote_plus('02-10-91aldigovE')
-
-    mongo_client = MongoClient(str("mongodb://%s:%s@172.31.22.3") % (username, password))
+    
 
     id = mongo_client.nutra.contenidos.find_one({"id_contenido":salida["id_contenido"]})
     if id is None:
@@ -83,9 +98,7 @@ def load_content(request):
 @csrf_exempt
 def set_consumo(request):
     salida = extraccion_atributos_en_objeto(request.POST) 
-    username = urllib.parse.quote_plus('aleja_user')
-    password = urllib.parse.quote_plus('02-10-91aldigovE')
-    mongo_client = MongoClient(str("mongodb://%s:%s@172.31.22.3") % (username, password))
+    
     mongo_client.nutra.consumos.insert_one(salida)
     print("....insercion consumo...",salida)
     return HttpResponse (
