@@ -58,7 +58,7 @@ def filter(request):
     campos = ["titulo","resumen","productos1","productos2","productos3","productos4","keyword1","keyword2","keyword3","keyword4","busqueda1","busqueda2","busqueda3"]
     obj = extraccion_atributos_en_objeto(request.POST) 
     tmp = mc().nutra.contenidos.find()
-    retornos= {"filtrado":[]}
+    retornos= []
     for o in tmp:
         consolidado = ""
         for c in campos:
@@ -68,7 +68,7 @@ def filter(request):
         print(o)
         for q in obj["query"].split(" "):
             if q.lower() in consolidado.lower():
-                retornos["filtrado"].append(int(o["id_contenido"]))
+                retornos.append(int(o["id_contenido"]))
     
     print(retornos)
     return HttpResponse (
