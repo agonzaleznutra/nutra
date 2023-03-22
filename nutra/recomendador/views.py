@@ -41,7 +41,7 @@ def index(request):
 def filtrado(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
     
-    salida = mc().nutra.contenidos.find()
+    salida = mc().nutra.contenidos.find({})
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
     for o in salida:
         retornos["tendencia"].append(int(o["id_contenido"]))
@@ -57,7 +57,7 @@ def filtrado(obj):
 def filter(request):
     
     obj = extraccion_atributos_en_objeto(request.POST) 
-    tmp = mc().nutra.contenidos.filter()
+    tmp = mc().nutra.contenidos.find()
     retornos= {"filtrado":[]}
     for o in tmp:
         consolidado = o["TITULO"]+" "+o["RESUMEN"]+" "+o["PRODUCTOS1"]+" "+o["PRODUCTOS2"]+" "+o["PRODUCTOS3"]+" "+o["PRODUCTOS4"]+" "+o["KEYWORD1"]+" "+o["KEYWORD2"]+" "+o["KEYWORD3"]+" "+o["KEYWORD4"]+" "+o["BUSQUEDA1"]+" "+o["BUSQUEDA2"]+" "+o["BUSQUEDA3"]
