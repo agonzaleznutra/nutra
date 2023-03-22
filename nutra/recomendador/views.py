@@ -70,7 +70,7 @@ def filter(request):
             if q.lower() in consolidado.lower():
                 retornos["filtrado"].append(int(o["id_contenido"]))
     
-    
+    print(retornos)
     return HttpResponse (
 		json.dumps({"retorno":"ok","data":retornos}),
 		content_type = "application/json"
