@@ -7,8 +7,8 @@ import urllib.parse
 import datetime
 username = urllib.parse.quote_plus('aleja_user')
 password = urllib.parse.quote_plus('02-10-91aldigovE')
-
-mongo_client = MongoClient(str("mongodb://%s:%s@172.31.22.3") % (username, password))
+def mc():
+    return MongoClient(str("mongodb://%s:%s@172.31.22.3") % (username, password))
 def extraccion_atributos_en_objeto(obj):
     
     res = {}
@@ -41,7 +41,7 @@ def index(request):
 def filtrado(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
     
-    salida = mongo_client.nutra.contenidos.find()
+    salida = mc().nutra.contenidos.find()
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
     for o in salida:
         retornos["tendencia"].append(int(o["id_contenido"]))
@@ -57,7 +57,7 @@ def filtrado(obj):
 def filter(request):
     
     obj = extraccion_atributos_en_objeto(request.POST) 
-    tmp = mongo_client.nutra.contenidos.filter()
+    tmp = mc().nutra.contenidos.filter()
     retornos= {"filtrado":[]}
     for o in tmp:
         consolidado = o["TITULO"]+" "+o["RESUMEN"]+" "+o["PRODUCTOS1"]+" "+o["PRODUCTOS2"]+" "+o["PRODUCTOS3"]+" "+o["PRODUCTOS4"]+" "+o["KEYWORD1"]+" "+o["KEYWORD2"]+" "+o["KEYWORD3"]+" "+o["KEYWORD4"]+" "+o["BUSQUEDA1"]+" "+o["BUSQUEDA2"]+" "+o["BUSQUEDA3"]
@@ -84,13 +84,13 @@ def recomendacion(request):
 def load_content(request):
     salida = extraccion_atributos_en_objeto(request.POST) 
     
-    
+    mc = mc()
 
-    id = mongo_client.nutra.contenidos.find_one({"id_contenido":salida["id_contenido"]})
+    id = mc.nutra.contenidos.find_one({"id_contenido":salida["id_contenido"]})
     if id is None:
-        mongo_client.nutra.contenidos.insert_one(salida)
+        mc.nutra.contenidos.insert_one(salida)
     else:
-        mongo_client.nutra.contenidos.update_one({"id_contenido":salida["id_contenido"]},{"$set":salida})
+        mc.nutra.contenidos.update_one({"id_contenido":salida["id_contenido"]},{"$set":salida})
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
 		content_type = "application/json"
@@ -99,7 +99,7 @@ def load_content(request):
 def set_consumo(request):
     salida = extraccion_atributos_en_objeto(request.POST) 
     
-    mongo_client.nutra.consumos.insert_one(salida)
+    mc().nutra.consumos.insert_one(salida)
     print("....insercion consumo...",salida)
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
