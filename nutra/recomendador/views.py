@@ -55,15 +55,20 @@ def filtrado(obj):
     return retornos
 @csrf_exempt
 def filter(request):
-    
+    campos = ["titulo","resumen","productos1","productos2","productos3","productos4","keyword1","keyword2","keyword3","keyword4","busqueda1","busqueda2","busqueda3"]
     obj = extraccion_atributos_en_objeto(request.POST) 
     tmp = mc().nutra.contenidos.find()
     retornos= {"filtrado":[]}
     for o in tmp:
-        consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
+        consolidado = ""
+        for c in campos:
+            if c in o:
+                consolidado = consolidado + o[c]+" "
+        #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
         print(o)
-        if obj["query"].lower() in consolidado.lower():
-            retornos["filtrado"].append(int(o["id_contenido"]))
+        for q in obj["query"].split(" "):
+            if q.lower() in consolidado.lower():
+                retornos["filtrado"].append(int(o["id_contenido"]))
     
     
     return HttpResponse (
