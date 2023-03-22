@@ -60,8 +60,8 @@ def filter(request):
     tmp = mc().nutra.contenidos.find()
     retornos= {"filtrado":[]}
     for o in tmp:
+        consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
         print(o)
-        consolidado = o["TITULO"]+" "+o["RESUMEN"]+" "+o["PRODUCTOS1"]+" "+o["PRODUCTOS2"]+" "+o["PRODUCTOS3"]+" "+o["PRODUCTOS4"]+" "+o["KEYWORD1"]+" "+o["KEYWORD2"]+" "+o["KEYWORD3"]+" "+o["KEYWORD4"]+" "+o["BUSQUEDA1"]+" "+o["BUSQUEDA2"]+" "+o["BUSQUEDA3"]
         if obj["query"].lower() in consolidado.lower():
             retornos["filtrado"].append(int(o["id_contenido"]))
     
