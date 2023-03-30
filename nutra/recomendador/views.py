@@ -71,7 +71,7 @@ def filter(request):
     obj = extraccion_atributos_en_objeto(request.POST) 
     tmp = mc().nutra.contenidos.find()
     retornos= []
-    print("obj...."obj)
+    print("obj....",obj)
     print(obj[2][2])
     for o in tmp:
         consolidado = ""
