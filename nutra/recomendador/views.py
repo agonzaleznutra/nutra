@@ -55,6 +55,7 @@ def filtrado(obj):
     return retornos
 @csrf_exempt
 def filter(request):
+    #los tipos de consulta define consultas que validan contra varios campos un valor y son predefinidas
     tipos = {
     "todos" : ["titulo","presentador","resumen",
               "productos1","productos2","productos3","productos4",
@@ -72,16 +73,21 @@ def filter(request):
     tmp = mc().nutra.contenidos.find()
     retornos= []
     print("obj....",obj)
-    
+    consolidados = []
     for o in tmp:
-        consolidado = ""
-        for c in tipos[obj["tipo"]]:
-            if c in o:
-                consolidado = consolidado + o[c]+" "
-        #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
-        for q in obj["query"].split(" "):
-            if q.lower() in consolidado.lower():
-                retornos.append(int(o["id_contenido"]))
+        consolidado_total = ""
+        for p in obj:
+            if p in tipos:
+                for c in tipos[p]:
+                    if c in o:
+                        consolidado_total = consolidado_total + o[c]+" "
+            else:
+                consolidado_total = o[c]
+            
+            #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
+            for q in obj[p].split(" "):
+                if q.lower() in consolidado_total.lower() and int(o["id_contenido"]) not in retornos:
+                    retornos.append(int(o["id_contenido"]))
     
     print(retornos)
     return HttpResponse (
