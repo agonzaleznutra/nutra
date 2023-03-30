@@ -73,22 +73,22 @@ def filter(request):
     tmp = mc().nutra.contenidos.find()
     retornos= []
     print("obj....",obj)
-    consolidados = []
     for o in tmp:
         consolidado_total = ""
         for p in obj:
-            if p in tipos:
-                for c in tipos[p]:
-                    if c in o:
-                        consolidado_total = consolidado_total + o[c]+" "
-            else:
-                if p in o:
-                    consolidado_total = o[p]
-            
-            #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
-            for q in obj[p].split(" "):
-                if q.lower() in consolidado_total.lower() and int(o["id_contenido"]) not in retornos:
-                    retornos.append(int(o["id_contenido"]))
+            if p != "fecha":
+                if p in tipos:
+                    for c in tipos[p]:
+                        if c in o:
+                            consolidado_total = consolidado_total + o[c]+" "
+                else:
+                    if p in o:
+                        consolidado_total = o[p]
+                
+                #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
+                for q in obj[p].split(" "):
+                    if q.lower() in consolidado_total.lower() and int(o["id_contenido"]) not in retornos:
+                        retornos.append(int(o["id_contenido"]))
     
     print(retornos)
     return HttpResponse (
