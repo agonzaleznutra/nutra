@@ -72,7 +72,7 @@ def filter(request):
     tmp = mc().nutra.contenidos.find()
     retornos= []
     print("obj....",obj)
-    print(obj[2][2])
+    
     for o in tmp:
         consolidado = ""
         for c in tipos[obj["tipo"]]:
