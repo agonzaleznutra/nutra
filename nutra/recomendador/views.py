@@ -55,13 +55,27 @@ def filtrado(obj):
     return retornos
 @csrf_exempt
 def filter(request):
-    campos = ["titulo","resumen","productos1","productos2","productos3","productos4","keyword1","keyword2","keyword3","keyword4","busqueda1","busqueda2","busqueda3"]
+    tipos = {
+    "todos" : ["titulo","presentador","resumen",
+              "productos1","productos2","productos3","productos4",
+              "productos5","productos6","productos7","productos8",
+              "productos9","productos10","productos11","productos12",
+              "keyword1","keyword2","keyword3","keyword4","busqueda1","busqueda2","busqueda3",
+              "cincor","ruta_solo_medicos1","ruta_solo_medicos2","ruta_medicos_profesionales1",
+              "ruta_medicos_profesionales2","ruta_medicos_profesionales3","ruta_pacientes",
+              "tema_solo_medicos1","tema_solo_medicos2","tema_medicos_profesionales1",
+              "tema_medicos_profesionales2","tema_medicos_profesionales3","tema_pacientes"],
+    "listas": ["ruta_solo_medicos1","ruta_solo_medicos2","ruta_medicos_profesionales1",
+              "ruta_medicos_profesionales2","ruta_medicos_profesionales3","ruta_pacientes"]
+    }
     obj = extraccion_atributos_en_objeto(request.POST) 
     tmp = mc().nutra.contenidos.find()
     retornos= []
+    if obj.tipo == "null":
+        obj.tipo = "todos"
     for o in tmp:
         consolidado = ""
-        for c in campos:
+        for c in tipos[obj.tipo]:
             if c in o:
                 consolidado = consolidado + o[c]+" "
         #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
