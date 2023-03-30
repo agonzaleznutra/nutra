@@ -71,19 +71,14 @@ def filter(request):
     obj = extraccion_atributos_en_objeto(request.POST) 
     tmp = mc().nutra.contenidos.find()
     retornos= []
-    if obj["tipo"] == "null":
-        obj["tipo"] = "todos"
-    print("lista para:::",tipos[obj["tipo"]],".....",obj["query"])
+    print("obj...."obj)
+    print(obj[2][2])
     for o in tmp:
         consolidado = ""
         for c in tipos[obj["tipo"]]:
-            
             if c in o:
-                #print(c,"__",o[c])
                 consolidado = consolidado + o[c]+" "
         #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
-        if consolidado.strip() != "":
-            print(o["id_contenido"],o["titulo"],"_____",consolidado,"----",obj["query"])
         for q in obj["query"].split(" "):
             if q.lower() in consolidado.lower():
                 retornos.append(int(o["id_contenido"]))
