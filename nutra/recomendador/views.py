@@ -82,7 +82,8 @@ def filter(request):
                     if c in o:
                         consolidado_total = consolidado_total + o[c]+" "
             else:
-                consolidado_total = o[c]
+                if p in o:
+                    consolidado_total = o[p]
             
             #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
             for q in obj[p].split(" "):
