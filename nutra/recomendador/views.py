@@ -79,10 +79,10 @@ def filter(request):
         for c in tipos[obj["tipo"]]:
             
             if c in o:
-                print(c,"__",o[c])
+                #print(c,"__",o[c])
                 consolidado = consolidado + o[c]+" "
         #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
-        #print(o["id_contenido"],o["titulo"],"_____",consolidado,"----")
+        print(o["id_contenido"],o["titulo"],"_____",consolidado,"----")
         for q in obj["query"].split(" "):
             if q.lower() in consolidado.lower():
                 retornos.append(int(o["id_contenido"]))
