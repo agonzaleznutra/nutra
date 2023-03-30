@@ -104,14 +104,11 @@ def recomendacion(request):
 @csrf_exempt
 def load_content(request):
     salida = extraccion_atributos_en_objeto(request.POST) 
-    
-    mc = mc()
-
-    id = mc.nutra.contenidos.find_one({"id_contenido":salida["id_contenido"]})
+    id = mc().nutra.contenidos.find_one({"id_contenido":salida["id_contenido"]})
     if id is None:
-        mc.nutra.contenidos.insert_one(salida)
+        mc().nutra.contenidos.insert_one(salida)
     else:
-        mc.nutra.contenidos.update_one({"id_contenido":salida["id_contenido"]},{"$set":salida})
+        mc().nutra.contenidos.update_one({"id_contenido":salida["id_contenido"]},{"$set":salida})
     return HttpResponse (
 		json.dumps({"retorno":"ok"}),
 		content_type = "application/json"
