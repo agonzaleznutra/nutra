@@ -61,12 +61,12 @@ def filter(request):
               "productos5","productos6","productos7","productos8",
               "productos9","productos10","productos11","productos12",
               "keyword1","keyword2","keyword3","keyword4","busqueda1","busqueda2","busqueda3",
-              "cincor","ruta_solo_medicos1","ruta_solo_medicos2","ruta_medicos_profesionales1",
-              "ruta_medicos_profesionales2","ruta_medicos_profesionales3","ruta_pacientes",
+              "cincor","solo_medicos1","solo_medicos2","medicos_profesionales1",
+              "medicos_profesionales2","medicos_profesionales3","pacientes",
               "tema_solo_medicos1","tema_solo_medicos2","tema_medicos_profesionales1",
               "tema_medicos_profesionales2","tema_medicos_profesionales3","tema_pacientes"],
-    "listas": ["ruta_solo_medicos1","ruta_solo_medicos2","ruta_medicos_profesionales1",
-              "ruta_medicos_profesionales2","ruta_medicos_profesionales3","ruta_pacientes"]
+    "listas": ["solo_medicos1","solo_medicos2","medicos_profesionales1",
+              "medicos_profesionales2","medicos_profesionales3","pacientes"]
     }
     obj = extraccion_atributos_en_objeto(request.POST) 
     tmp = mc().nutra.contenidos.find()
