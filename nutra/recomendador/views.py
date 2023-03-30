@@ -43,15 +43,15 @@ def filtrado(obj):
     
     salida = mc().nutra.contenidos.find({})
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
-    for o in salida:
+    """for o in salida:
         retornos["tendencia"].append(int(o["id_contenido"]))
         retornos["recomendacion"].append(int(o["id_contenido"]))
         retornos["volveraver"].append(int(o["id_contenido"]))
     """
-    retornos["tendencia"] = [2,3,4,5]
-    retornos["recomendacion"] = [6,7,8,9]
-    retornos["volveraver"] = [10,11,12,13]
-    """
+    retornos["tendencia"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
+    retornos["recomendacion"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
+    retornos["volveraver"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
+    
     return retornos
 @csrf_exempt
 def filter(request):
