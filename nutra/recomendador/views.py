@@ -60,14 +60,16 @@ def filter(request):
     "todos" : ["titulo","presentador","resumen",
               "productos1","productos2","productos3","productos4",
               "productos5","productos6","productos7","productos8",
-              "productos9","productos10","productos11","productos12",
+              "productos9","productos10","productos11","productos12","productos13","productos14","productos15","productos16","productos17",
               "keyword1","keyword2","keyword3","keyword4","busqueda1","busqueda2","busqueda3",
-              "cincor","solo_medicos1","solo_medicos2","medicos_profesionales1",
-              "medicos_profesionales2","medicos_profesionales3","pacientes",
-              "tema_solo_medicos1","tema_solo_medicos2","tema_medicos_profesionales1",
-              "tema_medicos_profesionales2","tema_medicos_profesionales3","tema_pacientes"],
-    "listas": ["solo_medicos1","solo_medicos2","medicos_profesionales1",
-              "medicos_profesionales2","medicos_profesionales3","pacientes"]
+              "cincor",
+              "solo_medicos1","solo_medicos2","solo_medicos3","solo_medicos4","medicos_profesionales1",
+              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2",
+              "tema_solo_medicos1","tema_solo_medicos2","tema_solo_medicos3","tema_solo_medicos4","tema_medicos_profesionales1",
+              "tema_medicos_profesionales2","tema_medicos_profesionales3","tema_medicos_profesionales4","tema_pacientes","tema_pacientes2"],
+    "listas": ["solo_medicos1","solo_medicos2","solo_medicos3","solo_medicos4"
+               ,"medicos_profesionales1",
+              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"]
     }
     obj = extraccion_atributos_en_objeto(request.POST) 
     tmp = mc().nutra.contenidos.find()
