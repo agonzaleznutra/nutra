@@ -5,7 +5,7 @@ username = urllib.parse.quote_plus('aleja_user')
 password = urllib.parse.quote_plus('02-10-91aldigovE')
 url_bd = "172.31.22.3"
 class crud():
-    mc = mc()
+    mc =MongoClient(str("mongodb://%s:%s@%s") % (username, password,url_bd))
     def read_contenidos():
         return mc.nutra.contenidos.find({},{"documento_procesado":0,"_id":0})
     def read_contenidos_procesados():
@@ -26,5 +26,3 @@ class crud():
     def create_consumo(object):
         mc.nutra.consumos.insert_one(object)
         return "ok"
-def mc():
-    return MongoClient(str("mongodb://%s:%s@%s") % (username, password,url_bd))
