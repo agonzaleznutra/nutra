@@ -203,7 +203,7 @@ def obtener_recomendaciones_item(texto,lista):
     usrs_ret =[] 
     for o in results:
         if o[1] not in usrs_ret:
-            usrs_ret.append(o[1])
+            usrs_ret.append(int(o[1]))
 
     print(usrs_ret)
     return usrs_ret
