@@ -68,10 +68,9 @@ def buscar_contenido_por_texto(obj):
             #            retornos.append(int(o["id_contenido"]))
     return retornos
 def crear_contenido(salida):
-    id = crud().read_contenido_by_item(salida["id_contenido"])
+    results = list(crud().read_contenido_by_item(salida["id_contenido"]))
     ret = ""
-    print(id)
-    if id is None:
+    if len(results)==0:
         ret = crud().create_contenido(salida)
         print("creado...",ret)
         procesamiento_batch(ret)
