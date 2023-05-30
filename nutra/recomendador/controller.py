@@ -188,7 +188,7 @@ def obtener_recomendaciones_item(texto,lista):
     #ds = ds2.apply(lambda x: process_file(x) if x.name == 'contenido' else x)
 
     ds=ds.append(ds2, ignore_index = True)
-    ds=ds.iloc[:, [1,0,2]]
+    ds=ds.iloc[:, [1,0]]
     print("NUEVO DS")
     print(ds)
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
