@@ -32,10 +32,10 @@ def buscar_contenido_por_texto(obj):
     
     retornos= []
     if "todos" in obj:
-        retornos = obtener_recomendaciones_item(obj["todos"], crud.read_contenidos_procesados())
+        retornos = obtener_recomendaciones_item(obj["todos"], crud().read_contenidos_procesados())
     else:
 
-        lista = crud.read_contenidos_por_atributos(tipos[list(obj.keys())[0]])
+        lista = crud().read_contenidos_por_atributos(tipos[list(obj.keys())[0]])
         lista_consolidados = []
         for o in lista:
             consolidado = ""
@@ -68,22 +68,22 @@ def buscar_contenido_por_texto(obj):
             #            retornos.append(int(o["id_contenido"]))
     return retornos
 def crear_contenido(salida):
-    id = crud.read_contenido_by_item(salida["id_contenido"])
+    id = crud().read_contenido_by_item(salida["id_contenido"])
     ret = ""
     if id is None:
-        ret = crud.create_contenido(salida)
+        ret = crud().create_contenido(salida)
         procesamiento_batch(ret)
     else:
         
-        ret = crud.update_contenido(salida["id_contenido"],salida)
+        ret = crud().update_contenido(salida["id_contenido"],salida)
         procesamiento_batch(salida["id_contenido"])
     return ret
 def crear_consumo(objeto):
-    return crud.create_consumo(objeto )
+    return crud().create_consumo(objeto )
 def recomendar_contenido_home(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
     
-    salida = crud.read_contenidos()
+    salida = crud().read_contenidos()
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
     """for o in salida:
         retornos["tendencia"].append(int(o["id_contenido"]))
@@ -163,16 +163,16 @@ def procesar_documento(file_content):
 def procesamiento_batch(id=None):
 
     if id:
-        lista = crud.read_contenido_by_item(id)
+        lista = crud().read_contenido_by_item(id)
     else:
-        lista = crud.read_contenidos()
+        lista = crud().read_contenidos()
     for o in lista:
         salida = ""
         for i in o:
             if i in tipos["todos"]:
                 salida = salida + " "+o[i]
         procesar_documento(salida)
-        crud.update_contenido(o["id_contenido"],{"documento_procesado":salida})
+        crud().update_contenido(o["id_contenido"],{"documento_procesado":salida})
 
 def obtener_recomendaciones_item(texto,lista):
     ds =  pd.DataFrame(list(lista))
