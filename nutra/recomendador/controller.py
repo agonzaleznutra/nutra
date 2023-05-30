@@ -184,26 +184,26 @@ def obtener_recomendaciones_item(texto,lista):
     tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
     
     
-    ds2 = pd.DataFrame([{"id_contenido":"","id_user": -1 ,"documento_procesado":procesar_documento(texto)}])
+    ds2 = pd.DataFrame([{"id_contenido":"","documento_procesado":procesar_documento(texto)}])
     #ds = ds2.apply(lambda x: process_file(x) if x.name == 'contenido' else x)
 
     ds=ds.append(ds2, ignore_index = True)
     ds=ds.iloc[:, [1,0,2]]
     print("NUEVO DS")
     print(ds)
-    # tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
-    # results = []
-    # similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
-    # for idx, row in ds.iterrows():
-    #     if row["id_user"] == -1:
-    #         similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
-    #         similar_items = [(similarity_matrix[idx][i], ds['id_user'][i]) for i in similar_indices]
-    #         results= similar_items[1:]
+    tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
+    results = []
+    similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
+    for idx, row in ds.iterrows():
+        if row["id_user"] == -1:
+            similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
+            similar_items = [(similarity_matrix[idx][i], ds['id_user'][i]) for i in similar_indices]
+            results= similar_items[1:]
         
-    # usrs_ret =[] 
-    # for o in results:
-    #     if o[1] not in usrs_ret:
-    #         usrs_ret.append(o[1])
+    usrs_ret =[] 
+    for o in results:
+        if o[1] not in usrs_ret:
+            usrs_ret.append(o[1])
 
-    # print(usrs_ret)
+    print(usrs_ret)
     return []#usrs_ret
