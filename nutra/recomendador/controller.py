@@ -179,13 +179,13 @@ def obtener_recomendaciones_item(texto,lista):
 
     tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
     
-    
-    ds2 = pd.DataFrame([{"id_contenido":"","id_user": -1 ,"contenido":procesar_documento(texto)}])
+    print(ds)
+    ds2 = pd.DataFrame([{"id_contenido":"","id_user": -1 ,"documento_procesado":procesar_documento(texto)}])
     #ds = ds2.apply(lambda x: process_file(x) if x.name == 'contenido' else x)
 
     ds=ds.append(ds2, ignore_index = True)
     ds=ds.iloc[:, [1,0,2]]
-    tfidf_matrix = tf.fit_transform(ds['contenido'])
+    tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
     results = []
     similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
     for idx, row in ds.iterrows():
