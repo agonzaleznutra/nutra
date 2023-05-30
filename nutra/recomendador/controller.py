@@ -206,4 +206,4 @@ def obtener_recomendaciones_item(texto,lista):
             usrs_ret.append(o[1])
 
     print(usrs_ret)
-    return []#usrs_ret
+    return usrs_ret
