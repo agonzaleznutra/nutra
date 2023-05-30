@@ -161,7 +161,7 @@ def procesar_documento(file_content):
     file_content = remove_stop_words(file_content)
     return file_content
 def procesamiento_batch(id=None):
-
+    print(id, type(id))
     if id:
         lista = crud().read_contenido_by_item(id)
     else:
@@ -172,6 +172,8 @@ def procesamiento_batch(id=None):
             if i in tipos["todos"]:
                 salida = salida + " "+o[i]
         procesar_documento(salida)
+        print(o)
+        print(o["id_contenido"])
         crud().update_contenido(o["id_contenido"],{"documento_procesado":salida})
 
 def obtener_recomendaciones_item(texto,lista):
