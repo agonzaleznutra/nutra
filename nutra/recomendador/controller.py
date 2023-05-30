@@ -70,13 +70,16 @@ def buscar_contenido_por_texto(obj):
 def crear_contenido(salida):
     id = crud().read_contenido_by_item(salida["id_contenido"])
     ret = ""
+    print(id)
     if id is None:
         ret = crud().create_contenido(salida)
+        print("creado...",ret)
         procesamiento_batch(ret)
     else:
         
         ret = crud().update_contenido(salida["id_contenido"],salida)
         procesamiento_batch(salida["id_contenido"])
+        print("actualizado...",ret)
     return ret
 def crear_consumo(objeto):
     return crud().create_consumo(objeto )
