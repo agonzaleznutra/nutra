@@ -18,7 +18,7 @@ class crud():
             filtro[o]=1
         return self.mc.nutra.contenidos.find({},filtro)
     def read_contenido_by_item(self,id):
-        return self.mc.nutra.contenidos.find_one({"id_contenido":id},{"_id":0})
+        return self.mc.nutra.contenidos.find({"id_contenido":id},{"_id":0})
     def create_contenido(self,object):
         self.mc.nutra.contenidos.insert_one(object)
         return object["id_contenido"]
