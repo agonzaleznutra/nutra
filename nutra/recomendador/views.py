@@ -2,8 +2,7 @@ from django.http import HttpResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
-from controller import extraccion_atributos_en_objeto,buscar_contenido_por_texto,recomendar_contenido_home,crear_contenido,crear_consumo
-
+from .controller import extraccion_atributos_en_objeto,buscar_contenido_por_texto,recomendar_contenido_home,crear_contenido,crear_consumo
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")

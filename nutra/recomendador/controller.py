@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.metrics.pairwise import linear_kernel
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
-from model import crud
+from .model import crud
 import datetime
 
 language_stopwords = stopwords.words('spanish')
