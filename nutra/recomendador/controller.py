@@ -227,7 +227,8 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
     
     results = []
-    similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
+    #similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
+    similarity_matrix = cosine_similarity(tfidf_matrix)
     
     for idx, row in ds.iterrows():
         if row["id_contenido"] == -1:
