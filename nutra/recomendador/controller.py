@@ -232,17 +232,14 @@ def obtener_recomendaciones_item(texto,lista,th = 0.1):
         if row["id_contenido"] == -1:
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
             similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
-            print("indices...",similar_indices)
+            
 
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
-            print(similar_items ,type(similar_items))
             similar_items.sort(reverse = True)
             print("items...",similar_items)
-
             results= similar_items[1:]
         
     usrs_ret =[] 
-    print("results...",results.sort(key=lambda x:x[0]))
     for o in results:
         if int(o[1]) not in usrs_ret:
             usrs_ret.append(int(o[1]))
