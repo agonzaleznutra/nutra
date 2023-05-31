@@ -211,6 +211,7 @@ def obtener_recomendaciones_item(texto,lista):
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
     results = []
     similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
+    print(similarity_matrix)
     for idx, row in ds.iterrows():
         if row["id_contenido"] == -1:
             similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
