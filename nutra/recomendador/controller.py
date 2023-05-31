@@ -188,11 +188,12 @@ def buscar_por_texto_completo(texto):
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
     print("tercera busqueda........",ds1)
     ds3 = obtener_recomendaciones_item(texto, lista_consolidados)
+    ds4 = []
     for o in ds3:
         if o not in ds1:
-            ds1.append(o)
+            ds4.append(o)
     print("resultado final....",ds1)
-    return ds1
+    return {"resultados":ds1,"recomendaciones":ds4}
 def obtener_recomendaciones_item(texto,lista):
     ds =  pd.DataFrame(list(lista))
 
