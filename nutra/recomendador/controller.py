@@ -216,9 +216,10 @@ def obtener_recomendaciones_item(texto,lista,th = 0.1):
         if row["id_contenido"] == -1:
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
             similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
-            print(similar_indices)
-            
+            print("indices...",similar_indices)
+
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
+            print("items...",similar_items)
             results= similar_items[1:]
         
     usrs_ret =[] 
