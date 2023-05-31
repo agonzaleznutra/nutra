@@ -214,6 +214,7 @@ def buscar_por_texto_completo(texto):
     print("resultado final....",{"resultados":ds1,"recomendaciones":ds3})
     return {"resultados":ds1,"recomendaciones":ds3}
 def obtener_recomendaciones_item(texto,lista,th = 0.05):
+    
     ds =  pd.DataFrame(list(lista))
 
     tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
@@ -225,6 +226,7 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
     ds=ds.iloc[:, [1,0]]
 
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
+    print(texto,tfidf_matrix)
     results = []
     similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
     
