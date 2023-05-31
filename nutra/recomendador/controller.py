@@ -228,10 +228,11 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
     
     results = []
     similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
-    print("matriz....",similarity_matrix)
+    
     for idx, row in ds.iterrows():
         if row["id_contenido"] == -1:
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
+            print("matriz....",similarity_matrix[idx])
             similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
             print("indices....",similar_indices)
 
