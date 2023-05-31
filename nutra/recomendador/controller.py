@@ -208,12 +208,12 @@ def buscar_por_texto_completo(texto):
                     consolidado = consolidado + " "+v
             lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
     
-    ds3 = obtener_recomendaciones_item(texto, lista_consolidados,0.05)
+    ds3 = obtener_recomendaciones_item(texto, lista_consolidados,0.001)
     
     
     print("resultado final....",{"resultados":ds1,"recomendaciones":ds3})
     return {"resultados":ds1,"recomendaciones":ds3}
-def obtener_recomendaciones_item(texto,lista,th = 0.1):
+def obtener_recomendaciones_item(texto,lista,th = 0.05):
     ds =  pd.DataFrame(list(lista))
 
     tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
