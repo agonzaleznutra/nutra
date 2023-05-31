@@ -224,17 +224,16 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
 
     ds=ds.append(ds2, ignore_index = True)
     ds=ds.iloc[:, [1,0]]
-    print(texto,ds)
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
     
     results = []
     similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
-    print(similarity_matrix)
+    print("matriz....",similarity_matrix)
     for idx, row in ds.iterrows():
         if row["id_contenido"] == -1:
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
             similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
-            
+            print("indices....",similar_indices)
 
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
             similar_items.sort(reverse = True)
