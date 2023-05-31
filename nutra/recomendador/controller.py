@@ -35,7 +35,7 @@ def buscar_contenido_por_texto(obj):
     
     retornos= []
     if "todos" in obj:
-        retornos = obtener_recomendaciones_item(obj["todos"], crud().read_contenidos_procesados())
+        retornos = buscar_por_texto_completo()
     else:
 
         lista = crud().read_contenidos_por_atributos(tipos[list(obj.keys())[0]])
@@ -180,7 +180,38 @@ def procesamiento_batch(id=None):
         print(o)
         print(o["id_contenido"])
         crud().update_contenido(o["id_contenido"],{"documento_procesado":salida})
-
+def buscar_por_texto_completo(texto):
+    lista = crud().read_contenidos_por_atributos(tipos["data_visible"])
+    lista_consolidados = []
+    for o in lista:
+        consolidado = ""
+        for v in o:
+            consolidado = consolidado + " "+o[v]
+        lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
+    ds1 = obtener_recomendaciones_item(texto, lista_consolidados)
+    lista = crud().read_contenidos_por_atributos(tipos["data_visible2"])
+    lista_consolidados = []
+    for o in lista:
+        consolidado = ""
+        for v in o:
+            consolidado = consolidado + " "+o[v]
+        lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
+    ds2 = obtener_recomendaciones_item(texto, lista_consolidados)
+    for o in ds2:
+        if o not in ds1:
+            ds1.append(o)
+    lista = crud().read_contenidos_por_atributos(tipos["todos"])
+    lista_consolidados = []
+    for o in lista:
+        consolidado = ""
+        for v in o:
+            consolidado = consolidado + " "+o[v]
+        lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
+    ds3 = obtener_recomendaciones_item(texto, lista_consolidados)
+    for o in ds3:
+        if o not in ds1:
+            ds1.append(o)
+    return ds1
 def obtener_recomendaciones_item(texto,lista):
     ds =  pd.DataFrame(list(lista))
 
