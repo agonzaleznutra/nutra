@@ -227,5 +227,5 @@ def obtener_recomendaciones_item(texto,lista,th = 0.1):
         if int(o[1]) not in usrs_ret:
             usrs_ret.append(int(o[1]))
 
-    print(usrs_ret)
+    print("retornado....",usrs_ret)
     return usrs_ret
