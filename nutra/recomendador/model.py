@@ -33,7 +33,7 @@ class crud():
             '$sort': {'count': -1}
         }
         ]
-        return self.mc.nutra.contenidos.aggregate(pipeline)
+        return self.mc.nutra.consumos.aggregate(pipeline)
 
     def create_contenido(self,object):
         self.mc.nutra.contenidos.insert_one(object)
