@@ -235,6 +235,7 @@ def obtener_recomendaciones_item(texto,lista,th = 0.1):
             print("indices...",similar_indices)
 
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
+            print(similar_items)
             similar_items = similar_items.sort(reverse = True)[1:]
             print("items...",similar_items)
 
