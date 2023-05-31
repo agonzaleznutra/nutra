@@ -76,17 +76,18 @@ def crear_consumo(objeto):
     return crud().create_consumo(objeto )
 def recomendar_contenido_home(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
-    
-    salida = crud().read_contenidos()
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
-    """for o in salida:
-        retornos["tendencia"].append(int(o["id_contenido"]))
-        retornos["recomendacion"].append(int(o["id_contenido"]))
+    lista = crud().read_consumos_by_user(obj["id_user"])
+    for o in lista:
         retornos["volveraver"].append(int(o["id_contenido"]))
-    """
-    retornos["tendencia"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
+    lista = crud().read_consumos_by_agrupacion_contenido()
+    lista.sort(reverse = True)
+    for o in lista[0:30]:
+        print(o)
+        retornos["tendencia"].append(int(o["_id"]))
+    
     retornos["recomendacion"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
-    retornos["volveraver"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
+    retornos["solo_aqui"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
     
     return retornos
 def recomendar_contenido_video(obj):
