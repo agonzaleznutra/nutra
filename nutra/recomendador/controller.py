@@ -82,7 +82,7 @@ def recomendar_contenido_home(obj):
     for o in lista:
         retornos["volveraver"].append(int(o["id_contenido"]))
     lista = crud().read_consumos_by_agrupacion_contenido()
-    lista.sort(reverse = True)
+
     for o in lista[0:30]:
         print(o)
         retornos["tendencia"].append(int(o["_id"]))
