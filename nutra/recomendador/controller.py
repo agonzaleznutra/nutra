@@ -215,14 +215,16 @@ def obtener_recomendaciones_item(texto,lista,th = 0.1):
     for idx, row in ds.iterrows():
         if row["id_contenido"] == -1:
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
-            similar_indices = [i for i, x in enumerate(similarity_matrix[idx].argsort()[:-100:-1]) if x > th]
+            similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
             print("indices...",similar_indices)
 
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
             print("items...",similar_items)
-            results= similar_items[1:]
+
+            results= similar_items[1:].sort(key=lambda x:x[0])
         
     usrs_ret =[] 
+    print("results...",results)
     for o in results:
         if int(o[1]) not in usrs_ret:
             usrs_ret.append(int(o[1]))
