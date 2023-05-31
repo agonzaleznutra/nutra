@@ -192,7 +192,7 @@ def buscar_por_texto_completo(texto):
     for o in ds3:
         if o not in ds1:
             ds4.append(o)
-    print("resultado final....",ds1)
+    print("resultado final....",{"resultados":ds1,"recomendaciones":ds4})
     return {"resultados":ds1,"recomendaciones":ds4}
 def obtener_recomendaciones_item(texto,lista):
     ds =  pd.DataFrame(list(lista))
