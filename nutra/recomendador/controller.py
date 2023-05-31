@@ -46,29 +46,6 @@ def buscar_contenido_por_texto(obj):
                 consolidado = consolidado + " "+o[v]
             lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
         retornos = obtener_recomendaciones_item(list(obj.values())[0], lista_consolidados)
-        # for o in tmp:
-        #     consolidado_total = tmp["documento_procesado"]
-            
-        #     for p in obj:
-        #         if p in tipos and p != "todos":
-        #             consolidado_total = ""
-        #             for c in tipos[p]:
-        #                     if c in o:
-        #                         consolidado_total = consolidado_total + o[c]+" "
-
-        #     #if p != "fecha":
-        #     #    if p in tipos:
-        #     #        for c in tipos[p]:
-        #     #            if c in o:
-        #     #    else:
-        #     #                consolidado_total = consolidado_total + o[c]+" "
-        #     #        if p in o:
-        #     #            consolidado_total = o[p]
-                
-        #         #consolidado = o["titulo"]+" "+o["resumen"]+" "+o["productos1"]+" "+o["productos2"]+" "+o["productos3"]+" "+o["productos4"]+" "+o["keyword1"]+" "+o["keyword2"]+" "+o["keyword3"]+" "+o["keyword4"]+" "+o["busqueda1"]+" "+o["busqueda2"]+" "+o["busqueda3"]
-        #     #    for q in obj[p].split(" "):
-        #     #        if q.lower() in consolidado_total.lower() and int(o["id_contenido"]) not in retornos:
-            #            retornos.append(int(o["id_contenido"]))
     return retornos
 def crear_contenido(salida):
     results = list(crud().read_contenido_by_item(salida["id_contenido"]))
@@ -188,6 +165,7 @@ def buscar_por_texto_completo(texto):
         for v in o:
             consolidado = consolidado + " "+o[v]
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
+    print("primera busqueda........")
     ds1 = obtener_recomendaciones_item(texto, lista_consolidados)
     lista = crud().read_contenidos_por_atributos(tipos["data_visible2"])
     lista_consolidados = []
@@ -196,6 +174,7 @@ def buscar_por_texto_completo(texto):
         for v in o:
             consolidado = consolidado + " "+o[v]
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
+    print("segunda busqueda........",ds1)
     ds2 = obtener_recomendaciones_item(texto, lista_consolidados)
     for o in ds2:
         if o not in ds1:
@@ -207,10 +186,12 @@ def buscar_por_texto_completo(texto):
         for v in o:
             consolidado = consolidado + " "+o[v]
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
+    print("tercera busqueda........",ds1)
     ds3 = obtener_recomendaciones_item(texto, lista_consolidados)
     for o in ds3:
         if o not in ds1:
             ds1.append(o)
+    print("resultado final....",ds1)
     return ds1
 def obtener_recomendaciones_item(texto,lista):
     ds =  pd.DataFrame(list(lista))
@@ -219,7 +200,6 @@ def obtener_recomendaciones_item(texto,lista):
     
     
     ds2 = pd.DataFrame([{"id_contenido":-1,"documento_procesado":procesar_documento(texto)}])
-    #ds = ds2.apply(lambda x: process_file(x) if x.name == 'contenido' else x)
 
     ds=ds.append(ds2, ignore_index = True)
     ds=ds.iloc[:, [1,0]]
