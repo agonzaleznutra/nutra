@@ -35,7 +35,7 @@ def buscar_contenido_por_texto(obj):
     
     retornos= []
     if "todos" in obj:
-        retornos = buscar_por_texto_completo()
+        retornos = buscar_por_texto_completo(obj["todos"])
     else:
 
         lista = crud().read_contenidos_por_atributos(tipos[list(obj.keys())[0]])
