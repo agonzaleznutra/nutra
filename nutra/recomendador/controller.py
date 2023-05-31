@@ -28,7 +28,17 @@ tipos = {
               "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"],
     "data_visible":["titulo","tema_solo_medicos1","tema_solo_medicos2","tema_solo_medicos3","tema_solo_medicos4","tema_medicos_profesionales1",
               "tema_medicos_profesionales2","tema_medicos_profesionales3","tema_medicos_profesionales4","tema_pacientes","tema_pacientes2"],
-    "data_visible2":["resumen"] 
+    "data_visible2":["resumen"] ,
+    "data_invisible" : ["presentador",
+              "productos1","productos2","productos3","productos4",
+              "productos5","productos6","productos7","productos8",
+              "productos9","productos10","productos11","productos12","productos13","productos14","productos15","productos16","productos17",
+              "keyword1","keyword2","keyword3","keyword4","keyword5","keyword6",
+              "keyword_diagnostico","contenido_orientacion4",
+              "busqueda1","busqueda2","busqueda3",
+              "cincor",
+              "solo_medicos1","solo_medicos2","solo_medicos3","solo_medicos4","medicos_profesionales1",
+              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"],
     }
 def buscar_contenido_por_texto(obj):
     del obj["fecha"]
@@ -166,37 +176,43 @@ def buscar_por_texto_completo(texto):
             if k != "id_contenido":
                 consolidado = consolidado + " "+v
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
-    print("primera busqueda........")
+    
     ds1 = obtener_recomendaciones_item(texto, lista_consolidados)
+    print("primera busqueda........",ds1)
+
+
+
     lista = crud().read_contenidos_por_atributos(tipos["data_visible2"])
     lista_consolidados = []
     for o in lista:
         consolidado = ""
-        for k,v in o.items():
-            if k != "id_contenido":
-                consolidado = consolidado + " "+v
-        lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
-    print("segunda busqueda........",ds1)
+        if int(o["id_contenido"]) not in ds1:
+            for k,v in o.items():
+                if k != "id_contenido":
+                    consolidado = consolidado + " "+v
+            lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
     ds2 = obtener_recomendaciones_item(texto, lista_consolidados)
     for o in ds2:
         if o not in ds1:
             ds1.append(o)
-    lista = crud().read_contenidos_por_atributos(tipos["todos"])
+    print("segunda busqueda........",ds1)
+
+
+    lista = crud().read_contenidos_por_atributos(tipos["data_invisible"])
     lista_consolidados = []
     for o in lista:
         consolidado = ""
-        for k,v in o.items():
-            if k != "id_contenido":
-                consolidado = consolidado + " "+v
-        lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
-    print("tercera busqueda........",ds1)
-    ds3 = obtener_recomendaciones_item(texto, lista_consolidados,0.03)
-    ds4 = []
-    for o in ds3:
-        if o not in ds1:
-            ds4.append(o)
-    print("resultado final....",{"resultados":ds1,"recomendaciones":ds4})
-    return {"resultados":ds1,"recomendaciones":ds4}
+        if int(o["id_contenido"]) not in ds1:
+            for k,v in o.items():
+                if k != "id_contenido":
+                    consolidado = consolidado + " "+v
+            lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
+    
+    ds3 = obtener_recomendaciones_item(texto, lista_consolidados,0.05)
+    
+    
+    print("resultado final....",{"resultados":ds1,"recomendaciones":ds3})
+    return {"resultados":ds1,"recomendaciones":ds3}
 def obtener_recomendaciones_item(texto,lista,th = 0.1):
     ds =  pd.DataFrame(list(lista))
 
