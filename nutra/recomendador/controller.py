@@ -171,7 +171,7 @@ def buscar_por_texto_completo(texto):
     lista_consolidados = []
     for o in lista:
         consolidado = ""
-        for k,v in o:
+        for k,v in o.items():
             print(k,v,o)
             consolidado = consolidado + " "+o[v]
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
