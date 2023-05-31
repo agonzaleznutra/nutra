@@ -190,14 +190,14 @@ def buscar_por_texto_completo(texto):
                 consolidado = consolidado + " "+v
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
     print("tercera busqueda........",ds1)
-    ds3 = obtener_recomendaciones_item(texto, lista_consolidados)
+    ds3 = obtener_recomendaciones_item(texto, lista_consolidados,0.03)
     ds4 = []
     for o in ds3:
         if o not in ds1:
             ds4.append(o)
     print("resultado final....",{"resultados":ds1,"recomendaciones":ds4})
     return {"resultados":ds1,"recomendaciones":ds4}
-def obtener_recomendaciones_item(texto,lista):
+def obtener_recomendaciones_item(texto,lista,th = 0.1):
     ds =  pd.DataFrame(list(lista))
 
     tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
@@ -215,8 +215,7 @@ def obtener_recomendaciones_item(texto,lista):
     for idx, row in ds.iterrows():
         if row["id_contenido"] == -1:
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
-            similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > 0.1]
-            print("indices...",similar_indices)
+            similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th].argsort()[:-100:-1]
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
             results= similar_items[1:]
         
