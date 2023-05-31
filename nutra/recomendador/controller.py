@@ -215,7 +215,7 @@ def obtener_recomendaciones_item(texto,lista,th = 0.1):
     for idx, row in ds.iterrows():
         if row["id_contenido"] == -1:
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
-            similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th].sort()[0:100]
+            similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th].sort()
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
             results= similar_items[1:]
         
