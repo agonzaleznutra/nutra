@@ -227,7 +227,7 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
     ds=ds.append(ds2, ignore_index = True)
     ds=ds.iloc[:, [1,0]]
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
-    svd = TruncatedSVD(n_components=40)
+    svd = TruncatedSVD(n_components=200)
     matriz_svd = svd.fit_transform(tfidf_matrix)
     results = []
     #similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
