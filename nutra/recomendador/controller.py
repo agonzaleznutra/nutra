@@ -221,10 +221,10 @@ def obtener_recomendaciones_item(texto,lista,th = 0.1):
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
             print("items...",similar_items)
 
-            results= similar_items[1:].sort(key=lambda x:x[0])
+            results= similar_items[1:]
         
     usrs_ret =[] 
-    print("results...",results)
+    print("results...",results.sort(key=lambda x:x[0]))
     for o in results:
         if int(o[1]) not in usrs_ret:
             usrs_ret.append(int(o[1]))
