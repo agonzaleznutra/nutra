@@ -25,7 +25,10 @@ tipos = {
               "tema_medicos_profesionales2","tema_medicos_profesionales3","tema_medicos_profesionales4","tema_pacientes","tema_pacientes2"],
     "listas": ["solo_medicos1","solo_medicos2","solo_medicos3","solo_medicos4"
                ,"medicos_profesionales1",
-              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"]
+              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"],
+    "data_visible":["titulo","tema_solo_medicos1","tema_solo_medicos2","tema_solo_medicos3","tema_solo_medicos4","tema_medicos_profesionales1",
+              "tema_medicos_profesionales2","tema_medicos_profesionales3","tema_medicos_profesionales4","tema_pacientes","tema_pacientes2"],
+    "data_visible2":["resumen"] 
     }
 def buscar_contenido_por_texto(obj):
     del obj["fecha"]
@@ -41,7 +44,7 @@ def buscar_contenido_por_texto(obj):
             consolidado = ""
             for v in o:
                 consolidado = consolidado + " "+o[v]
-            lista_consolidados.append({"id_contenido":o["id_contenido"],"contenido_procesado":consolidado})
+            lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
         retornos = obtener_recomendaciones_item(list(obj.values())[0], lista_consolidados)
         # for o in tmp:
         #     consolidado_total = tmp["documento_procesado"]
@@ -189,8 +192,7 @@ def obtener_recomendaciones_item(texto,lista):
 
     ds=ds.append(ds2, ignore_index = True)
     ds=ds.iloc[:, [1,0]]
-    print("NUEVO DS")
-    print(ds)
+
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
     results = []
     similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
