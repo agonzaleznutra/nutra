@@ -162,8 +162,9 @@ def buscar_por_texto_completo(texto):
     lista_consolidados = []
     for o in lista:
         consolidado = ""
-        for v in o:
-            consolidado = consolidado + " "+o[v]
+        for k,v in o.items():
+            if k != "id_contenido":
+                consolidado = consolidado + " "+v
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
     print("primera busqueda........")
     ds1 = obtener_recomendaciones_item(texto, lista_consolidados)
@@ -172,8 +173,8 @@ def buscar_por_texto_completo(texto):
     for o in lista:
         consolidado = ""
         for k,v in o.items():
-            print(k,v,o)
-            consolidado = consolidado + " "+o[v]
+            if k != "id_contenido":
+                consolidado = consolidado + " "+v
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
     print("segunda busqueda........",ds1)
     ds2 = obtener_recomendaciones_item(texto, lista_consolidados)
@@ -184,8 +185,9 @@ def buscar_por_texto_completo(texto):
     lista_consolidados = []
     for o in lista:
         consolidado = ""
-        for v in o:
-            consolidado = consolidado + " "+o[v]
+        for k,v in o.items():
+            if k != "id_contenido":
+                consolidado = consolidado + " "+v
         lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
     print("tercera busqueda........",ds1)
     ds3 = obtener_recomendaciones_item(texto, lista_consolidados)
