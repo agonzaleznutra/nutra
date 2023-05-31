@@ -5,6 +5,8 @@ import pandas as pd
 from sklearn.metrics.pairwise import linear_kernel
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
+
 from .model import crud
 import datetime
 
@@ -225,10 +227,11 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
     ds=ds.append(ds2, ignore_index = True)
     ds=ds.iloc[:, [1,0]]
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
-    
+    svd = TruncatedSVD(n_components=10)
+    matriz_svd = svd.fit_transform(tfidf_matrix)
     results = []
     #similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
-    similarity_matrix = cosine_similarity(tfidf_matrix)
+    similarity_matrix = cosine_similarity(matriz_svd)
     
     for idx, row in ds.iterrows():
         if row["id_contenido"] == -1:
