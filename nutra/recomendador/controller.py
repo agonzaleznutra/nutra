@@ -87,7 +87,7 @@ def recomendar_contenido_home(obj):
         print(o)
         retornos["tendencia"].append(int(o["_id"]))
     
-    retornos["recomendacion"] = buscar_similares_a_contenidos(lista_bu)
+    retornos["recomendacion"] = buscar_similares_a_contenidos(crud().read_consumos_by_user(obj["id_user"]))
     retornos["solo_aqui"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
     print("resultados...",retornos)
     return retornos
