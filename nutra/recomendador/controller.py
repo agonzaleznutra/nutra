@@ -235,32 +235,25 @@ def obtener_recomendaciones_id(id,lista,th = 0.05):
     ds =  pd.DataFrame(list(lista))
 
     tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
-    
-    print("pave...",ds)
-    #ds2 = pd.DataFrame([{"id_contenido":-1,"documento_procesado":procesar_documento(texto)}])
-
-    #ds=ds.append(ds2, ignore_index = True)
-    #ds=ds.iloc[:, [1,0]]
-    tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
-    #svd = TruncatedSVD(n_components=70)
-    #matriz_svd = svd.fit_transform(tfidf_matrix)
-    results = []
-    #similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
-    #similarity_matrix = cosine_similarity(matriz_svd)
-    similarity_matrix = cosine_similarity(tfidf_matrix)
-    
-    for idx, row in ds.iterrows():
-        if row["id_contenido"] == int(id):
-            #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
-            similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
-            similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
-            similar_items.sort(reverse = True)
-            results= similar_items[1:]
-        
     usrs_ret =[] 
-    for o in results:
-        if int(o[1]) not in usrs_ret:
-            usrs_ret.append(int(o[1]))
+   
+    print("pave...",ds)
+
+    # tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
+    # results = []
+    # similarity_matrix = cosine_similarity(tfidf_matrix)
+    
+    # for idx, row in ds.iterrows():
+    #     if row["id_contenido"] == int(id):
+    #         #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
+    #         similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
+    #         similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
+    #         similar_items.sort(reverse = True)
+    #         results= similar_items[1:]
+        
+    # for o in results:
+    #     if int(o[1]) not in usrs_ret:
+    #         usrs_ret.append(int(o[1]))
 
     return usrs_ret
 def obtener_recomendaciones_item(texto,lista,th = 0.05):
