@@ -77,7 +77,7 @@ def crear_consumo(objeto):
 def recomendar_contenido_home(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
     if "id_user" not in obj:
-        obj["id_user"] = crud().read_usuario_mas_consumos()[0]
+        obj["id_user"] = crud().read_usuario_mas_consumos().next()["_id"]
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
     lista_bu = crud().read_consumos_by_user(obj["id_user"])
     for o in lista_bu:
