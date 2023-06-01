@@ -175,10 +175,11 @@ def buscar_similares_a_contenidos(conts):
     salida = []
     lista = crud().read_contenidos_procesados()
     for o in conts:
-        cont = crud().read_contenido_by_item(o["id_contenido"])
+    
         lista_consolidados = list(lista)
         
-        ds1 = obtener_recomendaciones_item(cont["documento_procesado"], lista_consolidados,0.1)
+        ds1 = obtener_recomendaciones_id(o["id_contenido"], lista_consolidados,0.1)
+        print("pto contro....",o,ds1)
         ds1.remove(int(o["id_contenido"]))
         for i in ds1:
             if i not in salida:
@@ -230,6 +231,41 @@ def buscar_por_texto_completo(texto):
     
     print("resultado final....",{"resultados":ds1,"recomendaciones":ds3})
     return {"resultados":ds1,"recomendaciones":ds3}
+def obtener_recomendaciones_id(id,lista,th = 0.05):
+    
+    ds =  pd.DataFrame(list(lista))
+
+    tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
+    
+    
+    #ds2 = pd.DataFrame([{"id_contenido":-1,"documento_procesado":procesar_documento(texto)}])
+
+    #ds=ds.append(ds2, ignore_index = True)
+    #ds=ds.iloc[:, [1,0]]
+    tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
+    #svd = TruncatedSVD(n_components=70)
+    #matriz_svd = svd.fit_transform(tfidf_matrix)
+    results = []
+    #similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
+    #similarity_matrix = cosine_similarity(matriz_svd)
+    similarity_matrix = cosine_similarity(tfidf_matrix)
+    
+    for idx, row in ds.iterrows():
+        if row["id_contenido"] == int(id):
+            #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
+            similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
+            similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
+            similar_items.sort(reverse = True)
+            print("items...",similar_items)
+            results= similar_items[1:]
+        
+    usrs_ret =[] 
+    for o in results:
+        if int(o[1]) not in usrs_ret:
+            usrs_ret.append(int(o[1]))
+
+    print("retornado....",usrs_ret)
+    return usrs_ret
 def obtener_recomendaciones_item(texto,lista,th = 0.05):
     
     ds =  pd.DataFrame(list(lista))
