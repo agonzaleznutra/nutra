@@ -250,13 +250,11 @@ def obtener_recomendaciones_id(id,lista,th = 0.05):
     similarity_matrix = cosine_similarity(tfidf_matrix)
     
     for idx, row in ds.iterrows():
-        print("pto contro22...",row)
         if row["id_contenido"] == int(id):
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
             similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
             similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
             similar_items.sort(reverse = True)
-            print("items...",similar_items)
             results= similar_items[1:]
         
     usrs_ret =[] 
