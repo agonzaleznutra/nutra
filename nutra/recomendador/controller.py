@@ -176,6 +176,7 @@ def buscar_similares_a_contenidos(conts):
     lista = list(crud().read_contenidos_procesados())
     
     for o in conts:
+        print("lista....",lista)
         ds1 = obtener_recomendaciones_id(o["id_contenido"], lista,0.1)        
         for i in ds1:
             if i not in salida:
