@@ -174,7 +174,7 @@ def procesamiento_batch(id=None):
 def buscar_similares_a_contenidos(conts):
     salida = []
     lista = crud().read_contenidos_procesados()
-    print("++",conts)
+    print("++",list(conts))
     for o in conts:
     
         lista_consolidados = list(lista)
