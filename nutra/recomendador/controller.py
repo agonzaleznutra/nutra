@@ -174,11 +174,10 @@ def procesamiento_batch(id=None):
 def buscar_similares_a_contenidos(conts):
     salida = []
     lista = crud().read_contenidos_procesados()
-    print("++",list(conts))
+    
     for o in conts:
     
         lista_consolidados = list(lista)
-        
         ds1 = obtener_recomendaciones_id(o["id_contenido"], lista_consolidados,0.1)
         print("pto contro....",o,ds1)
         ds1.remove(int(o["id_contenido"]))
@@ -253,6 +252,7 @@ def obtener_recomendaciones_id(id,lista,th = 0.05):
     similarity_matrix = cosine_similarity(tfidf_matrix)
     
     for idx, row in ds.iterrows():
+        print("pto contro22...",row)
         if row["id_contenido"] == int(id):
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
             similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
