@@ -19,20 +19,13 @@ class crud():
         return self.mc.nutra.contenidos.find({},filtro)
     def read_contenido_by_item(self,id):
         return self.mc.nutra.contenidos.find({"id_contenido":id},{"_id":0})
+    def read_usuario_mas_consumos(self):
+        pipeline = [{'$group': {'_id': '$id_usuario','count': {'$sum': 1}}},{'$sort': {'count': -1}}]
+        return self.mc.nutra.consumos.aggregate(pipeline)
     def read_consumos_by_user(self,id_user):
         return self.mc.nutra.consumos.find({"id_usuario":id_user},{"_id":0,"id_contenido":1,"fecha":1})
     def read_consumos_by_agrupacion_contenido(self):
-        pipeline = [
-        {
-            '$group': {
-                '_id': '$id_contenido',
-                'count': {'$sum': 1}
-            }
-        },
-        {
-            '$sort': {'count': -1}
-        }
-        ]
+        pipeline = [{'$group': {'_id': '$id_contenido','count': {'$sum': 1}}},{'$sort': {'count': -1}}]
         return self.mc.nutra.consumos.aggregate(pipeline)
 
     def create_contenido(self,object):
