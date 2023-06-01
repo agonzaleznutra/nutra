@@ -180,7 +180,7 @@ def buscar_similares_a_contenidos(conts):
         lista_consolidados = list(lista)
         ds1 = obtener_recomendaciones_id(o["id_contenido"], lista_consolidados,0.1)
         print("pto contro....",o,ds1)
-        ds1.remove(int(o["id_contenido"]))
+        
         for i in ds1:
             if i not in salida:
                 salida.append(i)
