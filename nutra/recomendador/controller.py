@@ -78,8 +78,8 @@ def recomendar_contenido_home(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
     print(obj)
     retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
-    lista = crud().read_consumos_by_user(obj["id_user"])
-    for o in lista:
+    lista_bu = crud().read_consumos_by_user(obj["id_user"])
+    for o in lista_bu:
         retornos["volveraver"].append(int(o["id_contenido"]))
     lista = crud().read_consumos_by_agrupacion_contenido()
 
@@ -87,7 +87,7 @@ def recomendar_contenido_home(obj):
         print(o)
         retornos["tendencia"].append(int(o["_id"]))
     
-    retornos["recomendacion"] = buscar_similares_a_contenidos(lista)
+    retornos["recomendacion"] = buscar_similares_a_contenidos(lista_bu)
     retornos["solo_aqui"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
     print("resultados...",retornos)
     return retornos
