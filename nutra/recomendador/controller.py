@@ -92,8 +92,10 @@ def recomendar_contenido_home(obj):
     return retornos
 def recomendar_contenido_video(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
-    
-    return {"recomendacion":obtener_recomendaciones_id(obj["id_contenido"], list(crud().read_contenidos_procesados()),0.1)}
+    print("entrada...video...",obj)
+    salida ={"recomendacion":obtener_recomendaciones_id(obj["id_contenido"], list(crud().read_contenidos_procesados()),0.1)}
+    print("sal...video..",salida)
+    return salida
     
 def extraccion_atributos_en_objeto(obj):
     
