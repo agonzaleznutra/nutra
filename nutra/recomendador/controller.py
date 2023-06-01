@@ -40,7 +40,7 @@ tipos = {
               "busqueda1","busqueda2","busqueda3",
               "cincor",
               "solo_medicos1","solo_medicos2","solo_medicos3","solo_medicos4","medicos_profesionales1",
-              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"],
+              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"]
     }
 def buscar_contenido_por_texto(obj):
     del obj["fecha"]
@@ -87,9 +87,9 @@ def recomendar_contenido_home(obj):
         print(o)
         retornos["tendencia"].append(int(o["_id"]))
     
-    retornos["recomendacion"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
+    retornos["recomendacion"] = buscar_similares_a_contenidos(lista)
     retornos["solo_aqui"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
-    
+    print("resultados...",retornos)
     return retornos
 def recomendar_contenido_video(obj):
     #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
@@ -171,6 +171,19 @@ def procesamiento_batch(id=None):
         print(o)
         print(o["id_contenido"])
         crud().update_contenido(o["id_contenido"],{"documento_procesado":salida})
+def buscar_similares_a_contenidos(conts):
+    salida = []
+    lista = crud().read_contenidos_procesados()
+    for o in conts:
+        cont = crud().read_contenido_by_item(o["id_contenido"])
+        lista_consolidados = list(lista)
+        
+        ds1 = obtener_recomendaciones_item(cont["documento_procesado"], lista_consolidados,0.1)
+        ds1.remove(int(o["id_contenido"]))
+        for i in ds1:
+            if i not in salida:
+                salida.append(i)
+    return salida
 def buscar_por_texto_completo(texto):
     lista = crud().read_contenidos_por_atributos(tipos["data_visible"])
     lista_consolidados = []
