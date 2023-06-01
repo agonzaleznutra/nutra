@@ -174,6 +174,7 @@ def procesamiento_batch(id=None):
 def buscar_similares_a_contenidos(conts):
     salida = []
     lista = crud().read_contenidos_procesados()
+    print("++",conts)
     for o in conts:
     
         lista_consolidados = list(lista)
@@ -184,6 +185,7 @@ def buscar_similares_a_contenidos(conts):
         for i in ds1:
             if i not in salida:
                 salida.append(i)
+    print("++",salida)
     return salida
 def buscar_por_texto_completo(texto):
     lista = crud().read_contenidos_por_atributos(tipos["data_visible"])
