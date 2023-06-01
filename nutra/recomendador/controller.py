@@ -238,7 +238,7 @@ def obtener_recomendaciones_id(id,lista,th = 0.05):
 
     tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
     
-    
+    print("pave...",ds)
     #ds2 = pd.DataFrame([{"id_contenido":-1,"documento_procesado":procesar_documento(texto)}])
 
     #ds=ds.append(ds2, ignore_index = True)
