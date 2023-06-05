@@ -221,10 +221,14 @@ def buscar_por_texto_completo(texto):
     
     print("resultado final....",{"resultados":ds1,"recomendaciones":ds3})
     return {"resultados":ds1,"recomendaciones":ds3}
+import re
+def custom_tokenizer(text):
+    tokens = re.findall(r'\w{1,}', text)  # Utiliza expresiones regulares para encontrar palabras parciales
+    return tokens
 def obtener_recomendaciones_id(id,lista,th = 0.05):
     
     ds =  pd.DataFrame(list(lista))
-    tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
+    tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0,tokenizer=custom_tokenizer)
     usrs_ret =[] 
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
     results = []
@@ -247,7 +251,7 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
     
     ds =  pd.DataFrame(list(lista))
 
-    tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
+    tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0,tokenizer=custom_tokenizer)
     
     
     ds2 = pd.DataFrame([{"id_contenido":-1,"documento_procesado":procesar_documento(texto)}])
