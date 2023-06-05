@@ -6,7 +6,10 @@ from sklearn.metrics.pairwise import linear_kernel
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
-
+from nltk.stem import WordNetLemmatizer
+lemmatizer = WordNetLemmatizer()
+import nltk
+nltk.download('wordnet')
 from .model import crud
 import datetime
 
@@ -221,10 +224,12 @@ def buscar_por_texto_completo(texto):
     
     print("resultado final....",{"resultados":ds1,"recomendaciones":ds3})
     return {"resultados":ds1,"recomendaciones":ds3}
-import re
+
 def custom_tokenizer(text):
-    tokens = re.findall(r'\w{1,}', text)  # Utiliza expresiones regulares para encontrar palabras parciales
-    return tokens
+    tokens = text.split()  # Dividir el texto en palabras
+    lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]  # Lematizar cada palabra
+    combined_tokens = tokens + lemmatized_tokens  # Combinar palabras normales y lematizadas
+    return combined_tokens
 def obtener_recomendaciones_id(id,lista,th = 0.05):
     
     ds =  pd.DataFrame(list(lista))
