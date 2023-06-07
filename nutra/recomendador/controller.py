@@ -187,7 +187,6 @@ def buscar_similares_a_contenidos(conts):
         for i in ds1:
             if i not in salida:
                 salida.append(i)
-    print("++",salida)
     return salida
 def buscar_por_texto_completo(texto):
     lista = crud().read_contenidos_por_atributos(tipos["data_visible"])
@@ -249,7 +248,6 @@ def obtener_recomendaciones_id(id,lista,th = 0.05):
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
     results = []
     similarity_matrix = cosine_similarity(tfidf_matrix)
-    print("sim....",similarity_matrix)
     for idx, row in ds.iterrows():
         if row["id_contenido"] == id:
             #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
