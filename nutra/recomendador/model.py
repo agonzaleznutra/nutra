@@ -34,6 +34,9 @@ class crud():
     def create_contenido(self,object):
         self.mc.nutra.contenidos.insert_one(object)
         return object["id_contenido"]
+    def create_usuario(self,object):
+        self.mc.nutra.usuarios.insert_one(object)
+        return object["id"]
     def update_contenido(self,id,object):
         self.mc.nutra.contenidos.update_one({"id_contenido":id},{"$set":object})
         return "ok"
