@@ -3,7 +3,8 @@ import urllib.parse
 
 username = urllib.parse.quote_plus('aleja_user')
 password = urllib.parse.quote_plus('02-10-91aldigovE')
-url_bd = "172.31.22.3"
+#url_bd = "172.31.22.3"
+url_bd = "44.209.53.70"
 class crud():
     def __init__(self):
         self.mc =MongoClient(str("mongodb://%s:%s@%s") % (username, password,url_bd))
@@ -19,6 +20,8 @@ class crud():
         return self.mc.nutra.contenidos.find({},filtro)
     def read_contenido_by_item(self,id):
         return self.mc.nutra.contenidos.find({"id_contenido":id},{"_id":0})
+    def read_usuario_by_id(self,id):
+        return self.mc.nutra.usuarios.find({"id":id},{"_id":0})
     def read_usuario_mas_consumos(self):
         pipeline = [{'$group': {'_id': '$id_usuario','count': {'$sum': 1}}},{'$sort': {'count': -1}}]
         return self.mc.nutra.consumos.aggregate(pipeline)
@@ -33,6 +36,9 @@ class crud():
         return object["id_contenido"]
     def update_contenido(self,id,object):
         self.mc.nutra.contenidos.update_one({"id_contenido":id},{"$set":object})
+        return "ok"
+    def update_usuario(self,id,object):
+        self.mc.nutra.usuarios.update_one({"id":id},{"$set":object})
         return "ok"
     def create_consumo(self,object):
         self.mc.nutra.consumos.insert_one(object)

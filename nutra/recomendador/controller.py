@@ -75,6 +75,17 @@ def crear_contenido(salida):
         procesamiento_batch(salida["id_contenido"])
         print("actualizado...",ret)
     return ret
+def crear_usuario(salida):
+    results = list(crud().read_usuario_by_id(salida["id"]))
+    ret = ""
+    if len(results)==0:
+        ret = crud().create_usuario(salida)
+        print("user_ creado...",ret)
+    else:
+        
+        ret = crud().update_usuario(salida["id"],salida)
+        print("user actualizado...",ret)
+    return ret
 def crear_consumo(objeto):
     return crud().create_consumo(objeto )
 def recomendar_contenido_home(obj):
