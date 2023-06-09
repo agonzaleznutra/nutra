@@ -82,7 +82,7 @@ class views_control:
         print("entrada...video...",obj)
         
         #salida ={"recomendacion":obtener_recomendaciones_id(obj["id_contenido"], list(crud().read_contenidos_procesados()),0.1)}
-        salida = {"recomendacion":logic().get_usuario_ha_visto_videos(obj["id_user"],[obj["id_contenido"]],[60,20,20])}
+        salida = {"recomendacion":logic().get_usuario_ha_visto_videos(obj["id_user"],[{"id_contenido":obj["id_contenido"]}],[60,20,20])}
         print("sal...video..",salida)
         return salida   
     def buscar_contenido_por_texto(self,obj):
