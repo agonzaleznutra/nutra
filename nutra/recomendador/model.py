@@ -3,8 +3,8 @@ import urllib.parse
 
 username = urllib.parse.quote_plus('aleja_user')
 password = urllib.parse.quote_plus('02-10-91aldigovE')
-url_bd = "172.31.22.3"
-#url_bd = "44.209.53.70"
+#url_bd = "172.31.22.3"
+url_bd = "44.209.53.70"
 class crud():
     def __init__(self):
         self.mc =MongoClient(str("mongodb://%s:%s@%s") % (username, password,url_bd))
@@ -18,6 +18,12 @@ class crud():
         for o in atributos:
             filtro[o]=1
         return self.mc.nutra.contenidos.find({},filtro)
+    def read_contenidos_by_query(self,query,columns =[]):
+        json_cols = {"_id":0}
+        for o in columns:
+            json_cols[o]=1
+        print("aca")
+        return self.mc.nutra.contenidos.find(query,json_cols)
     def read_contenido_by_item(self,id):
         return self.mc.nutra.contenidos.find({"id_contenido":id},{"_id":0})
     def read_usuario_by_id(self,id):

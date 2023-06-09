@@ -12,9 +12,11 @@ import nltk
 nltk.download('wordnet')
 from .model import crud
 import datetime
+import json
 
 language_stopwords = stopwords.words('spanish')
 #los tipos de consulta define consultas que validan contra varios campos un valor y son predefinidas
+map = {"desplegable3":"sujetoconocimientomf"}
 tipos = {
     "todos" : ["titulo","presentador","resumen",
               "productos1","productos2","productos3","productos4",
@@ -45,101 +47,170 @@ tipos = {
               "solo_medicos1","solo_medicos2","solo_medicos3","solo_medicos4","medicos_profesionales1",
               "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"]
     }
-def buscar_contenido_por_texto(obj):
-    del obj["fecha"]
-    
-    retornos= []
-    if "todos" in obj:
-        retornos = buscar_por_texto_completo(obj["todos"])
-    else:
 
-        lista = crud().read_contenidos_por_atributos(tipos[list(obj.keys())[0]])
-        lista_consolidados = []
-        for o in lista:
-            consolidado = ""
-            for v in o:
-                consolidado = consolidado + " "+o[v]
-            lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
-        retornos = obtener_recomendaciones_item(list(obj.values())[0], lista_consolidados)
-    return retornos
-def crear_contenido(salida):
-    results = list(crud().read_contenido_by_item(salida["id_contenido"]))
-    ret = ""
-    if len(results)==0:
-        ret = crud().create_contenido(salida)
-        print("creado...",ret)
-        procesamiento_batch(ret)
-    else:
-        
-        ret = crud().update_contenido(salida["id_contenido"],salida)
-        procesamiento_batch(salida["id_contenido"])
-        print("actualizado...",ret)
-    return ret
-def crear_usuario(salida):
-    results = list(crud().read_usuario_by_id(salida["id"]))
-    ret = ""
-    if len(results)==0:
-        ret = crud().create_usuario(salida)
-        print("user_ creado...",ret)
-    else:
-        
-        ret = crud().update_usuario(salida["id"],salida)
-        print("user actualizado...",ret)
-    return ret
-def crear_consumo(objeto):
-    return crud().create_consumo(objeto )
-def recomendar_contenido_home(obj):
-    #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
-    if "id_user" not in obj:
-        obj["id_user"] = crud().read_usuario_mas_consumos().next()["_id"]
-    retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
-    lista_bu = crud().read_consumos_by_user(obj["id_user"])
-    for o in lista_bu:
-        retornos["volveraver"].append(int(o["id_contenido"]))
-    lista = crud().read_consumos_by_agrupacion_contenido()
 
-    for o in list(lista)[0:30]:
-        retornos["tendencia"].append(int(o["_id"]))
-    
-    retornos["recomendacion"] = buscar_similares_a_contenidos(crud().read_consumos_by_user(obj["id_user"]))
-    retornos["solo_aqui"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
-    print("resultados...",retornos)
-    return retornos
-def recomendar_contenido_video(obj):
-    #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
-    print("entrada...video...",obj)
-    salida ={"recomendacion":obtener_recomendaciones_id(obj["id_contenido"], list(crud().read_contenidos_procesados()),0.1)}
-    print("sal...video..",salida)
-    return salida
-    
-def extraccion_atributos_en_objeto(obj):
-    
-    res = {}
-    for o in obj:
-        if o != "_id":
-            if ".json" in o:
-                print(o)
-                res[o.split(".json")[0].strip()]  = json.loads(obj[o])
-            elif "[]" in o:
-                lista = obj.getlist(o, [])
-                if len(lista) == 1 and lista[0].strip() == '':
-                    lista = []
-                nwlista = []
-                for j in lista:
-                    try:
-                        nwlista.append(json.loads(j))
-                    except:
-                        nwlista.append(j.strip())
-                res[o.split("[]")[0].strip()] = nwlista
+
+class views_control:
+    def crear_contenido(self,salida):
+        results = list(crud().read_contenido_by_item(salida["id_contenido"]))
+        ret = ""
+        if len(results)==0:
+            ret = crud().create_contenido(salida)
+            print("creado...",ret)
+            procesamiento_batch(ret)
+        else:
+            
+            ret = crud().update_contenido(salida["id_contenido"],salida)
+            procesamiento_batch(salida["id_contenido"])
+            print("actualizado...",ret)
+        return ret
+    def crear_usuario(self,salida):
+        results = list(crud().read_usuario_by_id(salida["id"]))
+        ret = ""
+        if len(results)==0:
+            ret = crud().create_usuario(salida)
+            print("user_ creado...",ret)
+        else:
+            
+            ret = crud().update_usuario(salida["id"],salida)
+            print("user actualizado...",ret)
+        return ret
+    def crear_consumo(self,objeto):
+        return crud().create_consumo(objeto )
+    def recomendar_contenido_video(self,obj):
+        #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
+        print("entrada...video...",obj)
+        
+        #salida ={"recomendacion":obtener_recomendaciones_id(obj["id_contenido"], list(crud().read_contenidos_procesados()),0.1)}
+        salida = {"recomendacion":logic().get_usuario_ha_visto_videos(obj["id_user"],[obj["id_contenido"]],[60,20,20])}
+        print("sal...video..",salida)
+        return salida   
+    def buscar_contenido_por_texto(self,obj):
+        del obj["fecha"]
+        
+        retornos= []
+        if "todos" in obj:
+            retornos = buscar_por_texto_completo(obj["todos"])
+        else:
+
+            lista = crud().read_contenidos_por_atributos(tipos[list(obj.keys())[0]])
+            lista_consolidados = []
+            for o in lista:
+                consolidado = ""
+                for v in o:
+                    consolidado = consolidado + " "+o[v]
+                lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
+            retornos = obtener_recomendaciones_item(list(obj.values())[0], lista_consolidados)
+        return retornos
+    def recomendar_contenido_home(self,obj):
+        #INICIALIZA RETORNO
+        retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
+        #CONSULTA LOS CONTENIDOS TENDENCIA Y LOS ASIGNA AL RETORNO
+        lista = crud().read_consumos_by_agrupacion_contenido()
+        valida_user = list(crud().read_usuario_by_id(obj["id_user"]))
+        for o in list(lista)[0:20]:
+            retornos["tendencia"].append(int(o["_id"]))
+        #PREGUNTA SI NO TRAE ID DE USUARIO
+        if "id_user" not in obj or len(valida_user) == 0:
+            #TRAE ID DE USUARIO? NO
+            #TRAE LISTA DE CONTENIDOS INICIALES EN LA ESCALERA
+            lista_basicos = list(crud().read_contenidos_by_query({"sujetoconocimientomf":"NO SABE NADA","sujetoamornb":"ODIA"},["id_contenido"]))
+            #MEZCLA 50-50 LAS TENDENCIAS CON OS CONTENIDOS INICIALES EN LA ESCALERA
+            for i in range(10):
+                retornos["recomendacion"].append(int(lista_basicos[i]["id_contenido"]))
+                retornos["recomendacion"].append(retornos["tendencia"][i])
+        else:
+            #TRAE ID DE USUARIO? SI
+            lista_bu = list(crud().read_consumos_by_user(obj["id_user"]))
+            #EL USUARIO YA HA VISTO CONTENIDOS? NO            
+            if len(lista_bu) == 0:
+                retornos["volveraver"]= []
+                retornos["recomendacion"] = logic().get_usuario_ha_visto_videos_n2(obj["id_user"],[70,30])
+            #EL USUARIO YA HA VISTO CONTENIDOS? SI
             else:
-                if o == "id" and obj[o]== "null":
-                    res[o] = ""
+                print("validando lista by user",lista_bu)
+                retornos["recomendacion"] = logic().get_usuario_ha_visto_videos(obj["id_user"],lista_bu,[40,40,20])
+                for o in lista_bu:
+                    retornos["volveraver"].append(int(o["id_contenido"]))
+        retornos["solo_aqui"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
+        print("resultados...",retornos)
+        return retornos
+
+class logic:
+    def distribuir_proporciones(self,arrs,proporcion):
+        retornos = []
+        tam_salida = 20
+        tams = [0,0,0]
+        for i,o in enumerate(proporcion):
+            tams[i] = round(tam_salida * (o/100))
+        for i,o in enumerate(tams):
+            for j in range(o):
+                retornos.append(arrs[i][j])
+        return retornos
+    def get_usuario_ha_visto_videos_n2(self,id_user,proporcion):
+        lista_por_categoria = []
+        #3. BUSCA CONTENIDOS CON LA CATEGORIA DE MI USUARIO
+        categorias_usuario = ["desplegable3"]
+        query_categorias = {}
+        tmp_categoria_usuario = list(crud().read_usuario_by_id(id_user))[0]
+        for o in categorias_usuario:
+            query_categorias[map[o]]=tmp_categoria_usuario[o]
+        
+        
+        tmp_lista_por_categoria = list(crud().read_contenidos_by_query(query_categorias,["id_contenido"]))
+        for o in tmp_lista_por_categoria:
+            lista_por_categoria.append(int(o["id_contenido"]))
+        #4. BUSCA CONTENIDO SIMILAR AL ANTERIOR
+        lista_cola_larga = logic().buscar_similares_a_contenidos(tmp_lista_por_categoria)
+        return logic().distribuir_proporciones([lista_por_categoria,lista_cola_larga],proporcion)
+    def get_usuario_ha_visto_videos(self,id_user,contenidos,proporcion):
+        
+        retornos = []
+        #5. BUSCA CONTENIDOS SIMILARES A LOS VISTOS O AL ACTUAL
+        lista_similar = logic().buscar_similares_a_contenidos(contenidos)
+        lista_n2 = logic().get_usuario_ha_visto_videos_n2(id_user,[66,33])
+        lista_n3 = logic().distribuir_proporciones([lista_similar,lista_n2],[40,60])
+        return lista_n3
+        
+        
+        
+    def extraccion_atributos_en_objeto(self,obj):
+        
+        res = {}
+        for o in obj:
+            if o != "_id":
+                if ".json" in o:
+                    print(o)
+                    res[o.split(".json")[0].strip()]  = json.loads(obj[o])
+                elif "[]" in o:
+                    lista = obj.getlist(o, [])
+                    if len(lista) == 1 and lista[0].strip() == '':
+                        lista = []
+                    nwlista = []
+                    for j in lista:
+                        try:
+                            nwlista.append(json.loads(j))
+                        except:
+                            nwlista.append(j.strip())
+                    res[o.split("[]")[0].strip()] = nwlista
                 else:
-                    res[o.strip()] = obj[o].strip()
-    
-    res["fecha"] = datetime.datetime.now().strftime("%Y-%m-%d")
-    return res
-    
+                    if o == "id" and obj[o]== "null":
+                        res[o] = ""
+                    else:
+                        res[o.strip()] = obj[o].strip()
+        
+        res["fecha"] = datetime.datetime.now().strftime("%Y-%m-%d")
+        return res
+    def buscar_similares_a_contenidos(self,conts):
+        salida = []
+        lista = list(crud().read_contenidos_procesados())
+        
+        for o in conts:
+            ds1 = obtener_recomendaciones_id(o["id_contenido"], lista,0.1)        
+            for i in ds1:
+                if i not in salida:
+                    salida.append(i)
+        return salida   
 
 def remove_stop_words(dirty_text):
     cleaned_text = ''
@@ -178,16 +249,7 @@ def procesamiento_batch(id=None):
         print(o)
         print(o["id_contenido"])
         crud().update_contenido(o["id_contenido"],{"documento_procesado":salida})
-def buscar_similares_a_contenidos(conts):
-    salida = []
-    lista = list(crud().read_contenidos_procesados())
-    
-    for o in conts:
-        ds1 = obtener_recomendaciones_id(o["id_contenido"], lista,0.1)        
-        for i in ds1:
-            if i not in salida:
-                salida.append(i)
-    return salida
+
 def buscar_por_texto_completo(texto):
     lista = crud().read_contenidos_por_atributos(tipos["data_visible"])
     lista_consolidados = []
