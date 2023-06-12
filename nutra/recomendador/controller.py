@@ -82,7 +82,7 @@ class views_control:
         print("entrada...video...",obj)
         
         #salida ={"recomendacion":obtener_recomendaciones_id(obj["id_contenido"], list(crud().read_contenidos_procesados()),0.1)}
-        salida = {"recomendacion":logic().get_usuario_ha_visto_videos(obj["id_user"],[{"id_contenido":obj["id_contenido"]}],[60,20,20])}
+        salida = {"recomendacion":logic().get_usuario_por_video(obj["id_user"],[{"id_contenido":obj["id_contenido"]}])}
         print("sal...video..",salida)
         return salida   
     def buscar_contenido_por_texto(self,obj):
@@ -145,6 +145,8 @@ class logic:
             tams[i] = round(tam_salida * (o/100))
         for i,o in enumerate(tams):
             for j in range(o):
+                if j > len(arrs[i]):
+                    continue
                 retornos.append(arrs[i][j])
         return retornos
     def get_usuario_ha_visto_videos_n2(self,id_user,proporcion):
@@ -163,9 +165,8 @@ class logic:
         #4. BUSCA CONTENIDO SIMILAR AL ANTERIOR
         lista_cola_larga = logic().buscar_similares_a_contenidos(tmp_lista_por_categoria)
         return logic().distribuir_proporciones([lista_por_categoria,lista_cola_larga],proporcion)
-    def get_usuario_ha_visto_videos(self,id_user,contenidos,proporcion):
+    def get_usuario_ha_visto_videos(self,id_user,contenidos):
         
-        retornos = []
         #5. BUSCA CONTENIDOS SIMILARES A LOS VISTOS O AL ACTUAL
         lista_similar = logic().buscar_similares_a_contenidos(contenidos)
         lista_n2 = logic().get_usuario_ha_visto_videos_n2(id_user,[66,33])
@@ -173,7 +174,13 @@ class logic:
         return lista_n3
         
         
+    def get_usuario_por_video(self,id_user,contenidos):
         
+        #5. BUSCA CONTENIDOS SIMILARES A LOS VISTOS O AL ACTUAL
+        lista_similar = logic().buscar_similares_a_contenidos(contenidos)
+        lista_n2 = logic().get_usuario_ha_visto_videos_n2(id_user,[50,50])
+        lista_n3 = logic().distribuir_proporciones([lista_similar,lista_n2],[60,40])
+        return lista_n3
     def extraccion_atributos_en_objeto(self,obj):
         
         res = {}
