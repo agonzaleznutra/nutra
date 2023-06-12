@@ -145,7 +145,7 @@ class logic:
             tams[i] = round(tam_salida * (o/100))
         for i,o in enumerate(tams):
             for j in range(o):
-                if j > len(arrs[i]):
+                if j == len(arrs[i]):
                     continue
                 retornos.append(arrs[i][j])
         return retornos
