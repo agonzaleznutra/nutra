@@ -3,8 +3,8 @@ import urllib.parse
 
 username = urllib.parse.quote_plus('aleja_user')
 password = urllib.parse.quote_plus('02-10-91aldigovE')
-#url_bd = "172.31.22.3"
-url_bd = "44.209.53.70"
+url_bd = "172.31.22.3"
+#url_bd = "44.209.53.70"
 class crud():
     def __init__(self):
         self.mc =MongoClient(str("mongodb://%s:%s@%s") % (username, password,url_bd))
