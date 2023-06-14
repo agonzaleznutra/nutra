@@ -13,6 +13,8 @@ nltk.download('wordnet')
 from .model import crud
 import datetime
 import json
+import time
+import inspect
 
 language_stopwords = stopwords.words('spanish')
 #los tipos de consulta define consultas que validan contra varios campos un valor y son predefinidas
@@ -49,7 +51,16 @@ tipos = {
     }
 
 
-
+class tiempo:
+    def __init__(self):
+        self.t1 = {"h":time.time(),"i":0}
+        pass
+    def prnt_time(self,l):
+        t2 = time.time()
+        print("t"+str(self.t1["i"])+":l"+str(l)+":", t2-self.t1["h"], "segundos")
+        self.t1["h"] = t2
+        self.t1["i"] = self.t1["i"]+1
+        
 class views_control:
     def crear_contenido(self,salida):
         results = list(crud().read_contenido_by_item(salida["id_contenido"]))
@@ -102,38 +113,55 @@ class views_control:
                 lista_consolidados.append({"id_contenido":o["id_contenido"],"documento_procesado":consolidado})
             retornos = obtener_recomendaciones_item(list(obj.values())[0], lista_consolidados)
         return retornos
+    
     def recomendar_contenido_home(self,obj):
+        import time
+        t1 = tiempo()
         #INICIALIZA RETORNO
         retornos = {"tendencia":[],"recomendacion":[],"volveraver":[]}
+        
+        t1.prnt_time(inspect.currentframe().f_lineno)
         #CONSULTA LOS CONTENIDOS TENDENCIA Y LOS ASIGNA AL RETORNO
         lista = crud().read_consumos_by_agrupacion_contenido()
+        t1.prnt_time(inspect.currentframe().f_lineno)
         valida_user = list(crud().read_usuario_by_id(obj["id_user"]))
+        t1.prnt_time(inspect.currentframe().f_lineno)
         for o in list(lista)[0:20]:
             retornos["tendencia"].append(int(o["_id"]))
         #PREGUNTA SI NO TRAE ID DE USUARIO
+        t1.prnt_time(inspect.currentframe().f_lineno)
         if "id_user" not in obj or len(valida_user) == 0:
             #TRAE ID DE USUARIO? NO
             #TRAE LISTA DE CONTENIDOS INICIALES EN LA ESCALERA
+            t1.prnt_time(inspect.currentframe().f_lineno)
             lista_basicos = list(crud().read_contenidos_by_query({"sujetoconocimientomf":"NO SABE NADA","sujetoamornb":"ODIA"},["id_contenido"]))
             #MEZCLA 50-50 LAS TENDENCIAS CON OS CONTENIDOS INICIALES EN LA ESCALERA
+            t1.prnt_time(inspect.currentframe().f_lineno)
             for i in range(10):
                 retornos["recomendacion"].append(int(lista_basicos[i]["id_contenido"]))
                 retornos["recomendacion"].append(retornos["tendencia"][i])
+            t1.prnt_time(inspect.currentframe().f_lineno)
         else:
             #TRAE ID DE USUARIO? SI
+            t1.prnt_time(inspect.currentframe().f_lineno)
             lista_bu = list(crud().read_consumos_by_user(obj["id_user"]))
-            #EL USUARIO YA HA VISTO CONTENIDOS? NO            
+            #EL USUARIO YA HA VISTO CONTENIDOS? NO        
+            t1.prnt_time(inspect.currentframe().f_lineno)    
             if len(lista_bu) == 0:
                 retornos["volveraver"]= []
                 retornos["recomendacion"] = logic().get_usuario_ha_visto_videos_n2(obj["id_user"],[70,30])
+                t1.prnt_time(inspect.currentframe().f_lineno)
             #EL USUARIO YA HA VISTO CONTENIDOS? SI
             else:
-                print("validando lista by user",lista_bu)
-                retornos["recomendacion"] = logic().get_usuario_ha_visto_videos(obj["id_user"],lista_bu,[40,40,20])
+                t1.prnt_time(inspect.currentframe().f_lineno)
+                retornos["recomendacion"] = logic().get_usuario_ha_visto_videos(obj["id_user"],lista_bu)
+                t1.prnt_time(inspect.currentframe().f_lineno)
                 for o in lista_bu:
                     retornos["volveraver"].append(int(o["id_contenido"]))
+                t1.prnt_time(inspect.currentframe().f_lineno)
         retornos["solo_aqui"] = [201, 216, 220, 227, 234, 247, 265, 276, 278, 432]
         print("resultados...",retornos)
+        t1.prnt_time(inspect.currentframe().f_lineno)
         return retornos
 
 class logic:
@@ -150,27 +178,38 @@ class logic:
                 retornos.append(arrs[i][j])
         return retornos
     def get_usuario_ha_visto_videos_n2(self,id_user,proporcion):
+        t1 = tiempo()
         lista_por_categoria = []
         #3. BUSCA CONTENIDOS CON LA CATEGORIA DE MI USUARIO
         categorias_usuario = ["desplegable3"]
         query_categorias = {}
+        t1.prnt_time(inspect.currentframe().f_lineno)
         tmp_categoria_usuario = list(crud().read_usuario_by_id(id_user))[0]
+        t1.prnt_time(inspect.currentframe().f_lineno)
         for o in categorias_usuario:
             query_categorias[map[o]]=tmp_categoria_usuario[o]
-        
+        t1.prnt_time(inspect.currentframe().f_lineno)
         
         tmp_lista_por_categoria = list(crud().read_contenidos_by_query(query_categorias,["id_contenido"]))
+        t1.prnt_time(inspect.currentframe().f_lineno)
         for o in tmp_lista_por_categoria:
             lista_por_categoria.append(int(o["id_contenido"]))
         #4. BUSCA CONTENIDO SIMILAR AL ANTERIOR
+        t1.prnt_time(inspect.currentframe().f_lineno)
+        print("control....",len(tmp_lista_por_categoria))
         lista_cola_larga = logic().buscar_similares_a_contenidos(tmp_lista_por_categoria)
+        t1.prnt_time(inspect.currentframe().f_lineno)
         return logic().distribuir_proporciones([lista_por_categoria,lista_cola_larga],proporcion)
     def get_usuario_ha_visto_videos(self,id_user,contenidos):
-        
+        t1 = tiempo()
         #5. BUSCA CONTENIDOS SIMILARES A LOS VISTOS O AL ACTUAL
+        
         lista_similar = logic().buscar_similares_a_contenidos(contenidos)
+        t1.prnt_time(inspect.currentframe().f_lineno)
         lista_n2 = logic().get_usuario_ha_visto_videos_n2(id_user,[66,33])
+        t1.prnt_time(inspect.currentframe().f_lineno)
         lista_n3 = logic().distribuir_proporciones([lista_similar,lista_n2],[40,60])
+        t1.prnt_time(inspect.currentframe().f_lineno)
         return lista_n3
         
         
@@ -209,14 +248,18 @@ class logic:
         res["fecha"] = datetime.datetime.now().strftime("%Y-%m-%d")
         return res
     def buscar_similares_a_contenidos(self,conts):
+        t1 = tiempo()
         salida = []
         lista = list(crud().read_contenidos_procesados())
-        
-        for o in conts:
+        t1.prnt_time(inspect.currentframe().f_lineno)
+        for o in conts[0:3]:
+            
             ds1 = obtener_recomendaciones_id(o["id_contenido"], lista,0.1)        
             for i in ds1:
                 if i not in salida:
                     salida.append(i)
+            t1.prnt_time(inspect.currentframe().f_lineno)
+        t1.prnt_time(inspect.currentframe().f_lineno)
         return salida   
 
 def remove_stop_words(dirty_text):
