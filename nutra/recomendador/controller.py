@@ -184,6 +184,7 @@ class logic:
         categorias_usuario = ["desplegable3"]
         query_categorias = {}
         t1.prnt_time(inspect.currentframe().f_lineno)
+        print(id_user)
         tmp_categoria_usuario = list(crud().read_usuario_by_id(id_user))[0]
         t1.prnt_time(inspect.currentframe().f_lineno)
         for o in categorias_usuario:
