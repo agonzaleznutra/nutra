@@ -392,6 +392,6 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
         if grado > 0:
             salida.append({"id":o["id_contenido"],"grado":len(texto_tokenizado)/grado})
     salida = sorted(salida, key=lambda x: x['grado'],reverse=True)
-    return [d['id_contenido'] for d in salida]
+    return [d['id'] for d in salida]
 
 
