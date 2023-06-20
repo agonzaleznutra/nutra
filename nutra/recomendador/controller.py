@@ -6,8 +6,8 @@ from sklearn.metrics.pairwise import linear_kernel
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
-#from nltk.stem import WordNetLemmatizer
-#lemmatizer = WordNetLemmatizer()
+from nltk.stem import WordNetLemmatizer
+lemmatizer = WordNetLemmatizer()
 import nltk
 nltk.download('wordnet')
 from .model import crud
@@ -92,7 +92,6 @@ class views_control:
         #LOGICA PENDIENTE CON SISTEMA DE RECOMENDACIÓN
         print("entrada...video...",obj)
         
-        #salida ={"recomendacion":obtener_recomendaciones_id(obj["id_contenido"], list(crud().read_contenidos_procesados()),0.1)}
         salida = {"recomendacion":logic().get_usuario_por_video(obj["id_user"],[{"id_contenido":obj["id_contenido"]}])}
         print("sal...video..",salida)
         return salida   
@@ -266,7 +265,7 @@ class logic:
 def remove_stop_words(dirty_text):
     cleaned_text = ''
     for word in dirty_text.split():
-        if word in language_stopwords or word in non_words:
+        if word in language_stopwords:
             continue
         else:
             cleaned_text += word + ' '
@@ -277,6 +276,8 @@ def remove_punctuation(dirty_string):
     dirty_string = dirty_string.replace('í', 'i')
     dirty_string = dirty_string.replace('ó', 'o')
     dirty_string = dirty_string.replace('ú', 'u')
+    for o in non_words:
+        dirty_string = dirty_string.replace(o, '')
     return dirty_string
 def procesar_documento(file_content):
     # All to lower case
@@ -349,14 +350,20 @@ def buscar_por_texto_completo(texto):
     return {"resultados":ds1,"recomendaciones":ds3}
 
 def custom_tokenizer(text):
-    tokens = text.split()  # Dividir el texto en palabras
+    lemmatized_tokens = []
+    tokens = procesar_documento(text).split()  # Dividir el texto en palabras
+    for token in tokens:
+        lt = lemmatizer.lemmatize(token)
+        if lt not in tokens:
+            lemmatized_tokens.append(lt)
+    
     #lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]  # Lematizar cada palabra
-    #combined_tokens = tokens + lemmatized_tokens  # Combinar palabras normales y lematizadas
-    return tokens
+    combined_tokens = tokens + lemmatized_tokens  # Combinar palabras normales y lematizadas
+    return combined_tokens
 def obtener_recomendaciones_id(id,lista,th = 0.05):
     
     ds =  pd.DataFrame(list(lista))
-    tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0,tokenizer=custom_tokenizer)
+    tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0)
     usrs_ret =[] 
     tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
     results = []
@@ -375,37 +382,16 @@ def obtener_recomendaciones_id(id,lista,th = 0.05):
 
     return usrs_ret
 def obtener_recomendaciones_item(texto,lista,th = 0.05):
-    
-    ds =  pd.DataFrame(list(lista))
+    salida = []
+    texto_tokenizado = custom_tokenizer(texto)
+    for o in lista:
+        grado = 0
+        for u in texto_tokenizado:
+            if u in " ".join(custom_tokenizer(o["documento_procesado"])):
+                grado += 1
+        if grado > 0:
+            salida.append({"id":o["id_contenido"],"grado":len(texto_tokenizado)/grado})
+    salida = sorted(salida, key=lambda x: x['grado'],reverse=True)
+    return [d['id_contenido'] for d in salida]
 
-    tf = TfidfVectorizer(analyzer='word', ngram_range=(1, 3), min_df=0,tokenizer=custom_tokenizer)
-    
-    
-    ds2 = pd.DataFrame([{"id_contenido":-1,"documento_procesado":procesar_documento(texto)}])
 
-    ds=ds.append(ds2, ignore_index = True)
-    ds=ds.iloc[:, [1,0]]
-    tfidf_matrix = tf.fit_transform(ds['documento_procesado'])
-    #svd = TruncatedSVD(n_components=70)
-    #matriz_svd = svd.fit_transform(tfidf_matrix)
-    results = []
-    #similarity_matrix = linear_kernel(tfidf_matrix, tfidf_matrix)
-    #similarity_matrix = cosine_similarity(matriz_svd)
-    similarity_matrix = cosine_similarity(tfidf_matrix)
-    
-    for idx, row in ds.iterrows():
-        if row["id_contenido"] == -1:
-            #similar_indices = similarity_matrix[idx].argsort()[:-100:-1]
-            similar_indices = [i for i, x in enumerate(similarity_matrix[idx]) if x > th]
-            similar_items = [(similarity_matrix[idx][i], ds['id_contenido'][i]) for i in similar_indices]
-            similar_items.sort(reverse = True)
-            print("items...",similar_items)
-            results= similar_items[1:]
-        
-    usrs_ret =[] 
-    for o in results:
-        if int(o[1]) not in usrs_ret:
-            usrs_ret.append(int(o[1]))
-
-    print("retornado....",usrs_ret)
-    return usrs_ret
