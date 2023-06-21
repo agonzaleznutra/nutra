@@ -48,6 +48,9 @@ class crud():
     def update_usuario(self,id,object):
         self.mc.nutra.usuarios.update_one({"id":id},{"$set":object})
         return "ok"
+    def create_relacion(self,object):
+        self.mc.nutra.relaciones.insert_one(object)
+        return "ok"
     def create_consumo(self,object):
         self.mc.nutra.consumos.insert_one(object)
         return "ok"

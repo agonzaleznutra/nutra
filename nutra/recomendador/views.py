@@ -43,6 +43,14 @@ def view_crear_contenido(request):
 		content_type = "application/json"
 	)
 @csrf_exempt
+def view_crear_relations(request):
+    retornos = views_control().crear_relations( logic().extraccion_atributos_en_objeto(request.POST) )
+    return HttpResponse (
+		json.dumps({"retorno":retornos}),
+		content_type = "application/json"
+	)
+
+@csrf_exempt
 def view_crear_consumo(request):
     retornos = views_control().crear_consumo(logic().extraccion_atributos_en_objeto(request.POST) )
     return HttpResponse (

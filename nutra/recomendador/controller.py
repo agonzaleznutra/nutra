@@ -75,6 +75,8 @@ class views_control:
             procesamiento_batch(salida["id_contenido"])
             print("actualizado...",ret)
         return ret
+    def crear_relations(self,objeto):
+        return crud().create_relacion(objeto )
     def crear_usuario(self,salida):
         results = list(crud().read_usuario_by_id(salida["id"]))
         ret = ""
