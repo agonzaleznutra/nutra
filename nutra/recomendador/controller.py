@@ -250,16 +250,23 @@ class logic:
         res["fecha"] = datetime.datetime.now().strftime("%Y-%m-%d")
         return res
     def buscar_similares_a_contenidos(self,conts):
+        
         t1 = tiempo()
         salida = []
         lista = list(crud().read_contenidos_procesados())
         t1.prnt_time(inspect.currentframe().f_lineno)
         for o in conts[0:3]:
-            
-            ds1 = obtener_recomendaciones_id(o["id_contenido"], lista,0.1)        
-            for i in ds1:
+            ds0 = list(crud().read_relaciones_by_id_contenido_origen(o))
+            for i in ds0:
                 if i not in salida:
-                    salida.append(i)
+                    salida.append(int(i["id_contenido_destino"]))
+            if len(salida) < 20:
+                ds1 = obtener_recomendaciones_id(o["id_contenido"], lista,0.1)        
+                for i in ds1:
+                    if i not in salida:
+                        salida.append(i)
+                        if len(salida) > 20:
+                            break
             t1.prnt_time(inspect.currentframe().f_lineno)
         t1.prnt_time(inspect.currentframe().f_lineno)
         return salida   

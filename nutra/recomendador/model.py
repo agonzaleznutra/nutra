@@ -51,6 +51,8 @@ class crud():
     def create_relacion(self,object):
         self.mc.nutra.relaciones.insert_one(object)
         return "ok"
+    def read_relaciones_by_id_contenido_origen(self,id):
+        return self.mc.nutra.relaciones.find({"id_contenido_original":str(id)},{"id_contenido_destino":1,"_id":0})
     def create_consumo(self,object):
         self.mc.nutra.consumos.insert_one(object)
         return "ok"
