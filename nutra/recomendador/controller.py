@@ -191,7 +191,10 @@ class logic:
         tmp_categoria_usuario = list(crud().read_usuario_by_id(id_user))[0]
         t1.prnt_time(inspect.currentframe().f_lineno)
         for o in categorias_usuario:
-            query_categorias[map[o]]=tmp_categoria_usuario[o]
+            try:
+                query_categorias[map[o]]=tmp_categoria_usuario[o]
+            except:
+                print(o,"no esta")
         t1.prnt_time(inspect.currentframe().f_lineno)
         
         tmp_lista_por_categoria = list(crud().read_contenidos_by_query(query_categorias,["id_contenido"]))
