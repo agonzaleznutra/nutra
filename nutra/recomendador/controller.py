@@ -133,6 +133,13 @@ class views_control:
             retornos["tendencia"].append(int(o["_id"]))
         #PREGUNTA SI NO TRAE ID DE USUARIO
         t1.prnt_time(inspect.currentframe().f_lineno)
+        retornos["todos"] = []
+        lista_todos = list(crud().read_contenidos_by_query({"busqueda2":"Todos"},["id_contenido"]))
+        t1.prnt_time(inspect.currentframe().f_lineno)
+        for i in lista_todos:
+            retornos["todos"].append(int(i["id_contenido"]))
+            
+        t1.prnt_time(inspect.currentframe().f_lineno)
         if "id_user" not in obj or len(valida_user) == 0:
             #TRAE ID DE USUARIO? NO
             #TRAE LISTA DE CONTENIDOS INICIALES EN LA ESCALERA
