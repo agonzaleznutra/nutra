@@ -47,7 +47,7 @@ tipos = {
               "busqueda1","busqueda2","busqueda3",
               "cincor",
               "solo_medicos1","solo_medicos2","solo_medicos3","solo_medicos4","medicos_profesionales1",
-              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes","pacientes2"]
+              "medicos_profesionales2","medicos_profesionales3","medicos_profesionales4","pacientes"]
     }
 
 
