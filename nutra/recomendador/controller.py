@@ -136,7 +136,7 @@ class views_control:
         retornos["todos"] = []
         lista_todos = list(crud().read_contenidos_by_query({"busqueda2":"Todos"},["id_contenido"]))
         t1.prnt_time(inspect.currentframe().f_lineno)
-        for i in lista_todos:
+        for i in lista_todos[0:20]:
             retornos["todos"].append(int(i["id_contenido"]))
             
         t1.prnt_time(inspect.currentframe().f_lineno)
