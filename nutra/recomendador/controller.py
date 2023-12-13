@@ -416,5 +416,18 @@ def obtener_recomendaciones_item(texto,lista,th = 0.05):
     print(salida)
     salida = sorted(salida, key=lambda x: x['grado'],reverse=True)
     return [int(d['id']) for d in salida]
+"""
+def s3:
+    import requests
+    import boto3
+    from botocore.config import Config
+    from botocore import UNSIGNED
 
+    s3 = boto3.client('s3',config = Config(signature_version=UNSIGNED))
 
+    res = s3.list_objects_v2(Bucket='coderbytechallengesandbox',Prefix="__cb__")
+    for obj in res.get('Contents',[]):
+    content= s3.get_object(Bucket='coderbytechallengesandbox',Key=obj['Key'])
+    print(content['Body'].read().decode('utf-8'))
+
+"""
